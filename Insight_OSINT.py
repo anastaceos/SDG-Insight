@@ -10,6 +10,8 @@ import base64
 import urllib.parse
 import os
 from dotenv import load_dotenv
+import concurrent.futures
+import logging
 
 #load_dotenv()  # Load API keys from a .env file
 
@@ -22,6 +24,8 @@ VIRUSTOTAL_API_KEY = "ca1e9b61569e86434c6e5e30345c6a453e51b3f0197148c3d51af89596
 ABUSEIPDB_API_KEY = "fb7a1175a449e459010776fea3d4ec2832b647da0422384efbbadc4ad594479f7efb6983dfe522ea"
 HYBRID_ANALYSIS_API_KEY = "6rnakmkj6ed49416v459v1fl75bbd7e3abafiwmf99ea95f84ow80g0ce3464a5d"
 URLSCAN_API_KEY = "01958a4b-1aec-7001-9c07-e01053a8158b"
+SHODAN_API_KEY = "Pc0gdLR5F1JXVSPLRDazU6u50YMjbUNW"
+ALIENVAULT_API_KEY = "b1a72dbeaa5f0991bc9d57f4ed64234341cb015a15c205a02a0d440bf2079418"
 
 # Headers for APIs
 VT_HEADERS = {
@@ -45,9 +49,9 @@ URLSCAN_HEADERS = {
     
 def determine_ioc_type(ioc):
     if validators.ipv4(ioc):
-        return "ipv4"
+        return "IPv4"
     elif validators.ipv6(ioc):
-        return "ipv6"
+        return "IPv6"
     elif validators.domain(ioc):
         return "domain"
     elif validators.url(ioc):
@@ -62,129 +66,136 @@ def determine_ioc_type(ioc):
         return "email"
     else:
         return "unknown"
-
-#  Submits a URL to VirusTotal for scanning and retrieves the analysis report.
-def query_virustotal_url(url):
-   
-    # Step 1: Submit the URL for scanning
-    submit_url = "https://www.virustotal.com/api/v3/urls"
-    response = requests.post(submit_url, headers=VT_HEADERS, data={"url": url})
     
-    if response.status_code != 200:
-        return {"error": f"Failed to submit URL to VirusTotal - {response.status_code}: {response.text}"}
-
-    # Extracting the scan ID from the response
+# Function to query an API with the given URL and headers    
+def query_api(url, headers, params=None, data=None, method="GET"):
     try:
-        scan_id = response.json()["data"]["id"]
-    except KeyError:
+        if method == "GET":
+            response = requests.get(url, headers=headers, params=params)
+        elif method == "POST":
+            response = requests.post(url, headers=headers, data=data)
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e:
+        logging.error(f"API request failed: {e}")
+        return {"error": str(e)}
+    
+# Function to query AlienVault OTX for threat intelligence    
+def query_alienvault(ioc, ioc_type):
+    url = f"https://otx.alienvault.com/api/v1/indicators/{ioc_type}/{ioc}/general"
+    headers = {"X-OTX-API-KEY": ALIENVAULT_API_KEY}
+
+    response = query_api(url, headers)
+    if "error" in response:
+        return response
+
+    data = response
+    #print(json.dumps(data, indent=4))
+    tags = [tag for pulse in data.get("pulse_info", {}).get("pulses", []) for tag in pulse.get("tags", [])]
+    names = [pulse.get("name", "Unknown") for pulse in data.get("pulse_info", {}).get("pulses", [])]
+    return {
+        "alienvault: pulse_count": data.get("pulse_info", {}).get("count", 0),
+        "alienvault: tags": tags,
+        "alienvault: name": names,
+        "alienvault: permalink": f"https://otx.alienvault.com/indicator/{ioc_type}/{ioc}"
+    }
+
+# Function to query VirusTotal for a URL
+def query_virustotal_url(url):
+    submit_url = "https://www.virustotal.com/api/v3/urls"
+    response = query_api(submit_url, VT_HEADERS, data={"url": url}, method="POST")
+    if "error" in response:
+        return response
+
+    scan_id = response.get("data", {}).get("id")
+    if not scan_id:
         return {"error": "Failed to extract scan ID from VirusTotal response"}
 
-    # Step 2: Wait a few seconds for the scan to complete
-    time.sleep(30)  # Give VirusTotal time to analyze the URL
+    time.sleep(60)  # Give VirusTotal time to analyze the URL
 
-    # Step 3: Retrieve the analysis report
     report_url = f"https://www.virustotal.com/api/v3/analyses/{scan_id}"
-    report_response = requests.get(report_url, headers=VT_HEADERS)
+    report_response = query_api(report_url, VT_HEADERS)
+    if "error" in report_response:
+        return report_response
 
-    if report_response.status_code != 200:
-        return {"error": f"Failed to retrieve report from VirusTotal - {report_response.status_code}: {report_response.text}"}
-
-    report_data = report_response.json()
-
-    #analysis_attributes = report_data["data"]["attributes"]
-
+    report_data = report_response.get("data", {}).get("attributes", {})
     #print(json.dumps(report_data, indent=4))
-
-    # Extract relevant results
     return {
-        "virustotal: status": report_data["data"]["attributes"]["status"],
-        "virustotal: reputation": report_data["data"]["attributes"]["stats"],
-        #"tags": analysis_attributes.get("tags", []),
-        #"VT permalink": f"https://www.virustotal.com/gui/url/{scan_id}"
+        #"virustotal: status": report_data.get("status"),
+        "virustotal: reputation": report_data.get("stats"),
     }
 
 # Function to query VirusTotal for an IP address
 def query_virustotal_ip(ip):
     url = f"https://www.virustotal.com/api/v3/ip_addresses/{ip}"
-    response = requests.get(url, headers=VT_HEADERS)
-    if response.status_code == 200:
-        data = response.json()
-        #print(json.dumps(data, indent=4))
-        return {
-            "virustotal: country": data.get("data", {}).get("attributes", {}).get("country", "Unknown"),
-            "virustotal: as_owner": data.get("data", {}).get("attributes", {}).get("as_owner", "Unknown"),
-            "virustotal: reputation": data.get("data", {}).get("attributes", {}).get("last_analysis_stats", {}),
-            "virustotal: malicious_vote": data.get("data", {}).get("attributes", {}).get("total_votes", {}).get("malicious", 0),
-            "virustotal: harmless_vote": data.get("data", {}).get("attributes", {}).get("total_votes", {}).get("harmless", 0),
-            "virustotal: tags": data.get("data", {}).get("attributes", {}).get("tags", [])
-        }
-    else:
-        return {"ip": ip, "error": f"Failed to retrieve from VirusTotal - Status Code: {response.status_code}, Message: {response.text}"}
+    response = query_api(url, VT_HEADERS)
+    if "error" in response:
+        return response
+
+    data = response.get("data", {}).get("attributes", {})
+    return {
+        "virustotal: country": data.get("country", "Unknown"),
+        "virustotal: as_owner": data.get("as_owner", "Unknown"),
+        "virustotal: reputation": data.get("last_analysis_stats", {}),
+        "virustotal: malicious_vote": data.get("total_votes", {}).get("malicious", 0),
+        "virustotal: harmless_vote": data.get("total_votes", {}).get("harmless", 0),
+        "virustotal: tags": data.get("tags", [])
+    }
 
 # Function to query VirusTotal for a file hash
 def query_virustotal_hash(file_hash):
     url = f"https://www.virustotal.com/api/v3/files/{file_hash}"
-    response = requests.get(url, headers=VT_HEADERS)
-    if response.status_code == 200:
-        data = response.json()
-        #print(json.dumps(data, indent=4))
-        return {
-            "virustotal: reputation": data.get("data", {}).get("attributes", {}).get("last_analysis_stats", {}),
-            "virustotal: malicious_vote": data.get("data", {}).get("attributes", {}).get("total_votes", {}).get("malicious", 0),
-            "virustotal: harmless_vote": data.get("data", {}).get("attributes", {}).get("total_votes", {}).get("harmless", 0),
-            "virustotal: tags": data.get("data", {}).get("attributes", {}).get("tags", [])
-        }
-    else:
-        return {"hash": file_hash, "error": f"Failed to retrieve from VirusTotal - Status Code: {response.status_code}, Message: {response.text}"}
+    response = query_api(url, VT_HEADERS)
+    if "error" in response:
+        return response
+
+    data = response.get("data", {}).get("attributes", {})
+    return {
+        "virustotal: reputation": data.get("last_analysis_stats", {}),
+        "virustotal: malicious_vote": data.get("total_votes", {}).get("malicious", 0),
+        "virustotal: harmless_vote": data.get("total_votes", {}).get("harmless", 0),
+        "virustotal: tags": data.get("tags", [])
+    }
 
 # Function to query VirusTotal for a domain
 def query_virustotal_domain(domain):
     url = f"https://www.virustotal.com/api/v3/domains/{domain}"
-    response = requests.get(url, headers=VT_HEADERS)
-    if response.status_code == 200:
-        data = response.json()
-        print(json.dumps(data, indent=4))
-        return {
-            "virustotal: categories": data.get("data", {}).get("attributes", {}).get("categories", "Unknown"),
-            "virustotal: registrar": data.get("data", {}).get("attributes", {}).get("registrar", "Unknown"),
-            "virustotal: reputation": data.get("data", {}).get("attributes", {}).get("last_analysis_stats", {}),
-            "virustotal: malicious_vote": data.get("data", {}).get("attributes", {}).get("total_votes", {}).get("malicious", 0),
-            "virustotal: harmless_vote": data.get("data", {}).get("attributes", {}).get("total_votes", {}).get("harmless", 0),
-            "virustotal: tags": data.get("data", {}).get("attributes", {}).get("tags", [])
-        }
-    else:
-        return {"domain": domain, "error": f"Failed to retrieve from VirusTotal - Status Code: {response.status_code}, Message: {response.text}"}
+    response = query_api(url, VT_HEADERS)
+    if "error" in response:
+        return response
 
-# Function to submit a URL to URLScan.io for analysis  
-def submit_urlscan(url):
-    submit_url = "https://urlscan.io/api/v1/scan/"
-    payload = {"url": url, "visibility": "public"}  # Set "private" for non-public scans
-
-    response = requests.post(submit_url, headers=URLSCAN_HEADERS, json=payload)
-
-    if response.status_code != 200:
-        return {"error": f"Failed to submit URL to URLScan.io - {response.status_code}: {response.text}"}
-
-    data = response.json()
+    data = response.get("data", {}).get("attributes", {})
     return {
-        "url": url,
-        "scan_id": data.get("uuid"),
-        "urlscan_permalink": data.get("result")  # Direct link to the scan report
+        "virustotal: categories": data.get("categories", "Unknown"),
+        "virustotal: registrar": data.get("registrar", "Unknown"),
+        "virustotal: reputation": data.get("last_analysis_stats", {}),
+        "virustotal: malicious_vote": data.get("total_votes", {}).get("malicious", 0),
+        "virustotal: harmless_vote": data.get("total_votes", {}).get("harmless", 0),
+        "virustotal: tags": data.get("tags", [])
     }
 
-# Retrieves the scan report from URLScan.io using the scan ID
+def submit_urlscan(url):
+    submit_url = "https://urlscan.io/api/v1/scan/"
+    payload = {"url": url, "visibility": "public"}
+    response = query_api(submit_url, URLSCAN_HEADERS, data=json.dumps(payload), method="POST")
+    if "error" in response:
+        return response
+
+    return {
+        "url": url,
+        "scan_id": response.get("uuid"),
+        "urlscan_permalink": response.get("result")
+    }
+
 def get_urlscan_report(scan_id):
     report_url = f"https://urlscan.io/api/v1/result/{scan_id}/"
-    response = requests.get(report_url, headers=URLSCAN_HEADERS)
+    response = query_api(report_url, URLSCAN_HEADERS)
+    if "error" in response:
+        return response
 
-    if response.status_code != 200:
-        return {"error": f"Failed to retrieve URLScan.io report - {response.status_code}: {response.text}"}
-
-    data = response.json()
-    #print(json.dumps(data, indent=4))
+    data = response
     return {
-        #"url": data.get("page", {}).get("url"),
-        "urlscan: status": data.get("task", {}).get("status"),
+        #"urlscan: status": data.get("task", {}).get("status"),
         "urlscan: score": data.get("verdicts", {}).get("urlscan", "Unknown"),
         "urlscan: ip stats": data.get("stats", {}).get("ipStats", {}),
         "urlscan: domain": data.get("stats", {}).get("domainStats", {}),
@@ -195,68 +206,101 @@ def get_urlscan_report(scan_id):
         "urlscan: permalink": f"https://urlscan.io/result/{scan_id}/"
     }
 
-# Function to submit a URL to URLScan.io and retrieve the analysis results
 def submit_and_query_urlscan(url):
     submission = submit_urlscan(url)
-    
     if "error" in submission:
         return submission
 
     scan_id = submission.get("scan_id")
-    time.sleep(30)  # Wait for URLScan.io to process the request
+    time.sleep(60)  # Wait for URLScan.io to process the request
 
     report = get_urlscan_report(scan_id)
-    return report
+    return report    
 
 # Function to query AbuseIPDB for an IP address
 def query_abuseipdb(ip):
     url = "https://api.abuseipdb.com/api/v2/check"
     params = {"ipAddress": ip, "maxAgeInDays": 90}
-    response = requests.get(url, headers=ABUSEIPDB_HEADERS, params=params)
-    if response.status_code == 200:
-        data = response.json()
-        print(json.dumps(data, indent=4))
-        return {
-            "abuseipdb: abuse_confidence": data.get("data", {}).get("abuseConfidenceScore", 0),
-            "abuseipdb: total_reports": data.get("data", {}).get("totalReports", 0),
-            "abuseipdb: country": data.get("data", {}).get("countryCode", "Unknown"),
-            "abuseipdb: usage_type": data.get("data", {}).get("usageType", "Unknown"),
-            "abuseipdb: isp": data.get("data", {}).get("isp", "Unknown"),
-            "abuseipdb: domain": data.get("data", {}).get("domain", "Unknown"),
-            "abuseipdb: hostnames": data.get("data", {}).get("hostnames", []),
-            "abuseipdb: last_report": data.get("data", {}).get("lastReportedAt", "Unknown"),
-            "abuseipdb: is_public": data.get("data", {}).get("isPublic", "Unknown"),
-            "abuseipdb: isTor": data.get("data", {}).get("isTor", "Unknown"),
-            "abuseipdb: isProxy": data.get("data", {}).get("isProxy", "Unknown")
-        }
-    else:
-        return {"ip": ip, "error": f"Failed to retrieve from AbuseIPDB - Status Code: {response.status_code}, Message: {response.text}"}
-    
+    response = query_api(url, ABUSEIPDB_HEADERS, params=params)
+    if "error" in response:
+        return response
+
+    data = response.get("data", {})
+    return {
+        "abuseipdb: abuse_confidence": data.get("abuseConfidenceScore", 0),
+        "abuseipdb: total_reports": data.get("totalReports", 0),
+        "abuseipdb: country": data.get("countryCode", "Unknown"),
+        "abuseipdb: usage_type": data.get("usageType", "Unknown"),
+        "abuseipdb: isp": data.get("isp", "Unknown"),
+        "abuseipdb: domain": data.get("domain", "Unknown"),
+        "abuseipdb: hostnames": data.get("hostnames", []),
+        "abuseipdb: last_report": data.get("lastReportedAt", "Unknown"),
+        "abuseipdb: is_public": data.get("isPublic", "Unknown"),
+        "abuseipdb: isTor": data.get("isTor", "Unknown"),
+        "abuseipdb: isProxy": data.get("isProxy", "Unknown")
+    }
+
 # Function to query Hybrid Analysis for a file hash
 def query_hybrid_analysis_hash(file_hash):
     url = "https://www.hybrid-analysis.com/api/v2/search/hash"
     payload = f"hash={file_hash}"
-    response = requests.post(url, headers=HYBRID_ANALYSIS_HEADERS, data=payload)
-    if response.status_code == 200:
-        data = response.json()
-        if data and isinstance(data, list):
-            filtered_data = [x for x in data if x.get("threat_score") is not None]
-            if filtered_data:
-                best_result = max(filtered_data, key=lambda x: x.get("threat_score", 0))
-                #print(json.dumps(data, indent=4))
-                return {
-                    "hybrid analysis: score": best_result.get("threat_score", "Unknown"),
-                    "hybrid analysis: verdict": best_result.get("verdict", "Unknown"),
-                    "hybrid analysis: url": best_result.get("report_url", "N/A")
-                }
-            else:
-                return {"hash": file_hash, "hybrid_analysis": "No results with threat score available"}
-        else:
-            return {"hash": file_hash, "hybrid_analysis": "No results found"}
-    elif response.status_code == 404:
-        return {"hash": file_hash, "hybrid_analysis": "No results found in Hybrid Analysis"}
-    else:
-        return {"hash": file_hash, "error": f"Failed to retrieve from Hybrid Analysis - Status Code: {response.status_code}, Message: {response.text}"}
+    response = query_api(url, HYBRID_ANALYSIS_HEADERS, data=payload, method="POST")
+    if "error" in response:
+        return response
+
+    data = response
+    if not data or not isinstance(data, list):
+        return {"hash": file_hash, "hybrid_analysis": "No results found"}
+
+    filtered_data = [x for x in data if x.get("threat_score") is not None]
+    if not filtered_data:
+        return {"hash": file_hash, "hybrid_analysis": "No results with threat score available"}
+
+    best_result = max(filtered_data, key=lambda x: x.get("threat_score", 0))
+    return {
+        "hybrid analysis: threat score": best_result.get("threat_score", "Unknown"),
+        "hybrid analysis: av detect": best_result.get("av_detect", "Unknown"),
+        "hybrid analysis: verdict": best_result.get("verdict", "Unknown"),
+        "hybrid analysis: submissions": best_result.get("submissions", "Unknown"),
+        "hybrid analysis: url": best_result.get("report_url", "N/A")
+    }
+
+# Function to query Shodan for IP intelligence
+def query_shodan(ip):
+    url = f"https://api.shodan.io/shodan/host/{ip}?key={SHODAN_API_KEY}"
+    response = query_api(url, {})
+    if "error" in response:
+        return response
+
+    data = response
+    return {
+        "shodan: ip": ip,
+        "shodan: country": data.get("country_name", "Unknown"),
+        "shodan: organization": data.get("org", "Unknown"),
+        "shodan: open_ports": data.get("ports", []),
+        "shodan: vulnerabilities": data.get("vulns", []),
+        "shodan: hostnames": data.get("hostnames", []),
+        "shodan: permalink": f"https://www.shodan.io/host/{ip}"
+    }
+
+def display_banner():
+    banner = r"""
+  _____           _       _     _           ____   _____ _____ _   _ _______ 
+ |_   _|         (_)     | |   | |         / __ \ / ____|_   _| \ | |__   __|
+   | |  _ __  ___ _  __ _| |__ | |_ ______| |  | | (___   | | |  \| |  | |   
+   | | | '_ \/ __| |/ _` | '_ \| __|______| |  | |\___ \  | | | . ` |  | |   
+  _| |_| | | \__ \ | (_| | | | | |_       | |__| |____) |_| |_| |\  |  | |   
+ |_____|_| |_|___/_|\__, |_| |_|\__|       \____/|_____/|_____|_| \_|  |_|   
+                     __/ |                                                   
+                    |___/                                                                   
+           SOC Analyst All-in-One Investigation Tool
+        ------------------------------------------------
+        - OSINT | Threat Intelligence | Incident Response
+        - Integrated APIs: VirusTotal, URLScan, AbuseIP DB and more!
+        - Developed for fast and efficient IOC analysis
+        ------------------------------------------------
+     """
+    print(banner)
 
 # Main function that processes IOCs
 def main():
@@ -269,31 +313,39 @@ def main():
         ioc_type = determine_ioc_type(ioc)
         result = {"input": ioc, "type": ioc_type}
         
-        if ioc_type in ["ipv4", "ipv6"]:
-            print(f"\nGathering Intel for IP: {ioc}\n")
-            result.update(query_virustotal_ip(ioc))
-            result.update(query_abuseipdb(ioc))
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            futures = []
+            
+            if ioc_type in ["IPv4", "IPv6"]:
+                print(f"\nGathering Intel for IP: {ioc}\n")
+                futures.append(executor.submit(query_virustotal_ip, ioc))
+                futures.append(executor.submit(query_abuseipdb, ioc))
+                futures.append(executor.submit(query_shodan, ioc))
+                futures.append(executor.submit(query_alienvault, ioc, ioc_type))
+            elif ioc_type == "domain":
+                print(f"\nGathering Intel for Domain: {ioc}\n")
+                futures.append(executor.submit(query_virustotal_domain, ioc))
+            elif ioc_type == "url":
+                print(f"\nGathering Intel for URL: {ioc}\n")
+                print("Please wait while the URL is being scanned...\n")
+                futures.append(executor.submit(query_virustotal_url, ioc))
+                futures.append(executor.submit(submit_and_query_urlscan, ioc))
+            elif ioc_type in ["md5", "sha1", "sha256"]:
+                print(f"\nGathering Intel for Hash ({ioc_type.upper()}): {ioc}\n")
+                futures.append(executor.submit(query_virustotal_hash, ioc))
+                futures.append(executor.submit(query_hybrid_analysis_hash, ioc))
+            elif ioc_type == "email":
+                print(f"\nGathering Intel for Email: {ioc}\n")
+                # Add any email-specific queries here if needed
+            else:
+                print("Unknown IOC type. Please enter a valid IP, domain, hash, or email.")
+                continue
+            
+            for future in concurrent.futures.as_completed(futures):
+                result.update(future.result())
+            
             print(json.dumps(result, indent=4))
-        elif ioc_type == "domain":
-            print(f"\nGathering Intel for Domain: {ioc}\n")
-            result.update(query_virustotal_domain(ioc))
-            print(json.dumps(result, indent=4))
-        elif ioc_type == "url":
-            print(f"\nGathering Intel for URL: {ioc}\n")
-            print("Please wait while the URL is being scanned...\n")
-            result.update(query_virustotal_url(ioc))
-            result.update(submit_and_query_urlscan(ioc))
-            print(json.dumps(result, indent=4))
-        elif ioc_type in ["md5", "sha1", "sha256"]:
-            print(f"\nGathering Intel for Hash ({ioc_type.upper()}): {ioc}\n")
-            result.update(query_virustotal_hash(ioc))
-            result.update(query_hybrid_analysis_hash(ioc))
-            print(json.dumps(result, indent=4))
-        elif ioc_type == "email":
-            print(f"\nGathering Intel for Email: {ioc}\n")
-            print(json.dumps(result, indent=4))
-        else:
-            print("Unknown IOC type. Please enter a valid IP, domain, hash, or email.")
 
 if __name__ == "__main__":
+    display_banner()
     main()
