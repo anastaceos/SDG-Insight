@@ -12,11 +12,12 @@ import os
 from dotenv import load_dotenv
 import concurrent.futures
 import logging
+from tabulate import tabulate
 
 #load_dotenv()  # Load API keys from a .env file
 
 #VIRUSTOTAL_API_KEY = os.getenv("VIRUSTOTAL_API_KEY")
-#ABUSEIPDB_API_KEY = os.getenv("ABUSEIPDB_API_KEY")
+#ABUSEIPDB_API_KEY = os.getenv("ABUSEIPDB_API_KEY")http
 #HYBRID_ANALYSIS_API_KEY = os.getenv("HYBRID_ANALYSIS_API_KEY")
 
 # API Keys (Set your own keys here)
@@ -53,7 +54,7 @@ def determine_ioc_type(ioc):
     elif validators.ipv6(ioc):
         return "IPv6"
     elif validators.domain(ioc):
-        return "domain"
+        return "Domain"
     elif validators.url(ioc):
         return "url"
     elif re.fullmatch(r"^[a-fA-F0-9]{32}$", ioc):
@@ -293,14 +294,43 @@ def display_banner():
  |_____|_| |_|___/_|\__, |_| |_|\__|       \____/|_____/|_____|_| \_|  |_|   
                      __/ |                                                   
                     |___/                                                                   
-           SOC Analyst All-in-One Investigation Tool
-        ------------------------------------------------
-        - OSINT | Threat Intelligence | Incident Response
-        - Integrated APIs: VirusTotal, URLScan, AbuseIP DB and more!
-        - Developed for fast and efficient IOC analysis
-        ------------------------------------------------
+            SOC Analyst All-in-One Investigation Tool
+          ------------------------------------------------
+          - OSINT | Threat Intelligence | Incident Response
+          - Integrated APIs: VirusTotal, URLScan, AbuseIP DB and more!
+          - Developed for fast and efficient IOC analysis
+          ------------------------------------------------
      """
     print(banner)
+'''
+def format_results_as_table(results):
+    table = []
+    for key, value in results.items():
+        if isinstance(value, list):
+            value = ", ".join(map(str, value))  # Convert each item to a string
+        table.append([key, value])
+    return tabulate(table, headers=["Field", "Value"], tablefmt="grid")
+'''
+
+def format_results_as_table(results):
+    def truncate(value, length=100):
+        if isinstance(value, str) and len(value) > length:
+            return value[:length] + "..."
+        return value
+
+    def format_value(value):
+        if isinstance(value, dict):
+            return json.dumps(value, indent=2)
+        elif isinstance(value, list):
+            return ", ".join(map(str, value))
+        return value
+
+    table = []
+    for key, value in results.items():
+        formatted_value = format_value(value)
+        truncated_value = truncate(formatted_value)
+        table.append([key, truncated_value])
+    return tabulate(table, headers=["Field", "Value"], tablefmt="grid")
 
 # Main function that processes IOCs
 def main():
@@ -322,7 +352,7 @@ def main():
                 futures.append(executor.submit(query_abuseipdb, ioc))
                 futures.append(executor.submit(query_shodan, ioc))
                 futures.append(executor.submit(query_alienvault, ioc, ioc_type))
-            elif ioc_type == "domain":
+            elif ioc_type == "Domain":
                 print(f"\nGathering Intel for Domain: {ioc}\n")
                 futures.append(executor.submit(query_virustotal_domain, ioc))
             elif ioc_type == "url":
@@ -344,7 +374,9 @@ def main():
             for future in concurrent.futures.as_completed(futures):
                 result.update(future.result())
             
-            print(json.dumps(result, indent=4))
+            #print(json.dumps(result, indent=4))
+
+            print(format_results_as_table(result))
 
 if __name__ == "__main__":
     display_banner()
