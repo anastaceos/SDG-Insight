@@ -44,8 +44,11 @@ HYBRID_ANALYSIS_HEADERS = {
     "Content-Type": "application/x-www-form-urlencoded"
 }
 URLSCAN_HEADERS = {
-    "API-Key": URLSCAN_API_KEY.strip(),  # Ensure no extra spaces
+    "API-Key": URLSCAN_API_KEY, 
     "Content-Type": "application/json"
+}
+ALIENVAULT_HEADERS = {
+    "X-OTX-API-KEY": ALIENVAULT_API_KEY
 }
     
 def determine_ioc_type(ioc):
@@ -81,12 +84,11 @@ def query_api(url, headers, params=None, data=None, method="GET"):
         logging.error(f"API request failed: {e}")
         return {"error": str(e)}
     
-# Function to query AlienVault OTX for threat intelligence    
-def query_alienvault(ioc, ioc_type):
+# Function to query AlienVault OTX for an IP address  
+def query_alienvault_ip(ioc, ioc_type):
     url = f"https://otx.alienvault.com/api/v1/indicators/{ioc_type}/{ioc}/general"
-    headers = {"X-OTX-API-KEY": ALIENVAULT_API_KEY}
 
-    response = query_api(url, headers)
+    response = query_api(url, ALIENVAULT_HEADERS)
     if "error" in response:
         return response
 
@@ -99,6 +101,44 @@ def query_alienvault(ioc, ioc_type):
         "alienvault: tags": tags,
         "alienvault: name": names,
         "alienvault: permalink": f"https://otx.alienvault.com/indicator/{ioc_type}/{ioc}"
+    }
+
+# Function to query AlienVault OTX for a domain
+def query_alienvault_domain(ioc):
+    url = f"https://otx.alienvault.com/api/v1/indicators/domain/{ioc}"
+
+    response = query_api(url, ALIENVAULT_HEADERS)
+    if "error" in response:
+        return response
+
+    data = response
+    #print(json.dumps(data, indent=4))
+    tags = [tag for pulse in data.get("pulse_info", {}).get("pulses", []) for tag in pulse.get("tags", [])]
+    names = [pulse.get("name", "Unknown") for pulse in data.get("pulse_info", {}).get("pulses", [])]
+    return {
+        "alienvault: pulse_count": data.get("pulse_info", {}).get("count", 0),
+        "alienvault: tags": tags,
+        "alienvault: name": names,
+        "alienvault: permalink": f"https://otx.alienvault.com/indicator/domain/{ioc}"
+    }
+
+# Function to query AlienVault OTX for a hash
+def query_alienvault_hash(ioc):
+    url = f"https://otx.alienvault.com/api/v1/indicators/file/{ioc}"
+
+    response = query_api(url, ALIENVAULT_HEADERS)
+    if "error" in response:
+        return response
+
+    data = response
+    #print(json.dumps(data, indent=4))
+    tags = [tag for pulse in data.get("pulse_info", {}).get("pulses", []) for tag in pulse.get("tags", [])]
+    names = [pulse.get("name", "Unknown") for pulse in data.get("pulse_info", {}).get("pulses", [])]
+    return {
+        "alienvault: pulse_count": data.get("pulse_info", {}).get("count", 0),
+        "alienvault: tags": tags,
+        "alienvault: name": names,
+        "alienvault: permalink": f"https://otx.alienvault.com/indicator/file/{ioc}"
     }
 
 # Function to query VirusTotal for a URL
@@ -302,35 +342,36 @@ def display_banner():
           ------------------------------------------------
      """
     print(banner)
-'''
-def format_results_as_table(results):
-    table = []
-    for key, value in results.items():
-        if isinstance(value, list):
-            value = ", ".join(map(str, value))  # Convert each item to a string
-        table.append([key, value])
-    return tabulate(table, headers=["Field", "Value"], tablefmt="grid")
-'''
 
+# Function to format results as a table using the tabulate library
 def format_results_as_table(results):
-    def truncate(value, length=100):
+    def split_into_lines(value, length=150):
         if isinstance(value, str) and len(value) > length:
-            return value[:length] + "..."
+            return '\n'.join([value[i:i+length] for i in range(0, len(value), length)])
         return value
 
-    def format_value(value):
+    def format_value(value, indent=0):
         if isinstance(value, dict):
-            return json.dumps(value, indent=2)
+            formatted_dict = []
+            for k, v in value.items():
+                formatted_dict.append(f"{' ' * indent}{k}: {format_value(v, indent + 2)}")
+            return '\n'.join(formatted_dict)
         elif isinstance(value, list):
-            return ", ".join(map(str, value))
-        return value
+            unique_values = list(dict.fromkeys(map(str, value)))  # Remove duplicates while preserving order
+            formatted_list = [f"{' ' * indent}- {item}" for item in unique_values]
+            return '\n'.join(formatted_list)
+        return str(value)
 
     table = []
     for key, value in results.items():
+        if ": " in key:
+            tool, field = key.split(": ", 1)
+        else:
+            tool, field = "", key
         formatted_value = format_value(value)
-        truncated_value = truncate(formatted_value)
-        table.append([key, truncated_value])
-    return tabulate(table, headers=["Field", "Value"], tablefmt="grid")
+        split_value = split_into_lines(formatted_value)
+        table.append([tool, field, split_value])
+    return tabulate(table, headers=["Tool", "Field", "Value"], tablefmt="grid")
 
 # Main function that processes IOCs
 def main():
@@ -340,6 +381,9 @@ def main():
             print("Exiting...")
             break
 
+        # Determine the type of IOC
+        # Strip any leading/trailing whitespace
+        ioc = ioc.strip()    
         ioc_type = determine_ioc_type(ioc)
         result = {"input": ioc, "type": ioc_type}
         
@@ -351,10 +395,11 @@ def main():
                 futures.append(executor.submit(query_virustotal_ip, ioc))
                 futures.append(executor.submit(query_abuseipdb, ioc))
                 futures.append(executor.submit(query_shodan, ioc))
-                futures.append(executor.submit(query_alienvault, ioc, ioc_type))
+                futures.append(executor.submit(query_alienvault_ip, ioc, ioc_type))
             elif ioc_type == "Domain":
                 print(f"\nGathering Intel for Domain: {ioc}\n")
                 futures.append(executor.submit(query_virustotal_domain, ioc))
+                futures.append(executor.submit(query_alienvault_domain, ioc))
             elif ioc_type == "url":
                 print(f"\nGathering Intel for URL: {ioc}\n")
                 print("Please wait while the URL is being scanned...\n")
@@ -363,6 +408,7 @@ def main():
             elif ioc_type in ["md5", "sha1", "sha256"]:
                 print(f"\nGathering Intel for Hash ({ioc_type.upper()}): {ioc}\n")
                 futures.append(executor.submit(query_virustotal_hash, ioc))
+                futures.append(executor.submit(query_alienvault_hash, ioc))
                 futures.append(executor.submit(query_hybrid_analysis_hash, ioc))
             elif ioc_type == "email":
                 print(f"\nGathering Intel for Email: {ioc}\n")
