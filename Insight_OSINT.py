@@ -44,7 +44,7 @@ HYBRID_ANALYSIS_HEADERS = {
     "Content-Type": "application/x-www-form-urlencoded"
 }
 URLSCAN_HEADERS = {
-    "API-Key": URLSCAN_API_KEY, 
+    "API-Key": URLSCAN_API_KEY.strip(),  # Ensure no extra spaces, 
     "Content-Type": "application/json"
 }
 ALIENVAULT_HEADERS = {
@@ -59,15 +59,15 @@ def determine_ioc_type(ioc):
     elif validators.domain(ioc):
         return "Domain"
     elif validators.url(ioc):
-        return "url"
+        return "URL"
     elif re.fullmatch(r"^[a-fA-F0-9]{32}$", ioc):
-        return "md5"
+        return "MD5"
     elif re.fullmatch(r"^[a-fA-F0-9]{40}$", ioc):
-        return "sha1"
+        return "SHA1"
     elif re.fullmatch(r"^[a-fA-F0-9]{64}$", ioc):
-        return "sha256"
+        return "SHA256"
     elif validators.email(ioc):
-        return "email"
+        return "Email"
     else:
         return "unknown"
     
@@ -215,6 +215,7 @@ def query_virustotal_domain(domain):
         "virustotal: tags": data.get("tags", [])
     }
 
+'''
 def submit_urlscan(url):
     submit_url = "https://urlscan.io/api/v1/scan/"
     payload = {"url": url, "visibility": "public"}
@@ -253,10 +254,99 @@ def submit_and_query_urlscan(url):
         return submission
 
     scan_id = submission.get("scan_id")
+    if not scan_id:
+        return {"error": "Failed to extract scan ID from URLScan.io response"}
+
+    print(f"Scan submitted. Scan ID: {scan_id}. Waiting for the scan to complete...")
+
+    # Retry mechanism to wait for the scan to complete
+    max_retries = 10
+    retry_delay = 30  # seconds
+    for attempt in range(max_retries):
+        time.sleep(retry_delay)
+        report = get_urlscan_report(scan_id)
+        if "errors" not in report:
+            return report
+        if "Scan is not finished yet" in report["errors"]:
+            print(f"Attempt {attempt + 1}/{max_retries}: Scan is not finished yet. Retrying in {retry_delay} seconds...")
+        else:
+            print(f"Error retrieving report: {report['errors']}")
+            return report
+
+    return {"error": "Failed to retrieve URLScan.io report after multiple attempts"}
+'''
+'''
+    submission = submit_urlscan(url)
+    if "error" in submission:
+        return submission
+
+    scan_id = submission.get("scan_id")
     time.sleep(60)  # Wait for URLScan.io to process the request
 
     report = get_urlscan_report(scan_id)
     return report    
+'''
+# Function to submit a URL to URLScan.io and retrieve the report
+def submit_urlscan(url):
+    submit_url = "https://urlscan.io/api/v1/scan/"
+    payload = {"url": url, "visibility": "public"}
+    response = query_api(submit_url, URLSCAN_HEADERS, data=json.dumps(payload), method="POST")
+    if "error" in response:
+        return response
+
+    return {
+        "url": url,
+        "scan_id": response.get("uuid"),
+        "urlscan_permalink": response.get("result")
+    }
+
+# Function to retrieve the URLScan.io report for a given scan ID
+def get_urlscan_report(scan_id):
+    report_url = f"https://urlscan.io/api/v1/result/{scan_id}/"
+    response = query_api(report_url, URLSCAN_HEADERS)
+    if "error" in response:
+        return response
+
+    data = response
+    return {
+        "urlscan: score": data.get("verdicts", {}).get("urlscan", "Unknown"),
+        "urlscan: ip stats": data.get("stats", {}).get("ipStats", {}),
+        "urlscan: domain": data.get("stats", {}).get("domainStats", {}),
+        "urlscan: categories": data.get("verdicts", {}).get("categories", []),
+        "urlscan: tags": data.get("verdicts", {}).get("overall", {}).get("tags", []),
+        "urlscan: malicious": data.get("verdicts", {}).get("overall", {}).get("malicious", False),
+        "urlscan: screenshot url": data.get("task", {}).get("screenshotURL", "N/A"),
+        "urlscan: permalink": f"https://urlscan.io/result/{scan_id}/"
+    }
+
+# Function to submit a URL to URLScan.io and retrieve the report
+def submit_and_query_urlscan(url):
+    submission = submit_urlscan(url)
+    if "error" in submission:
+        return submission
+
+    scan_id = submission.get("scan_id")
+    if not scan_id:
+        return {"error": "Failed to extract scan ID from URLScan.io response"}
+
+    print(f"Scan submitted. Scan ID: {scan_id}. Waiting for the scan to complete...")
+
+    # Retry mechanism to wait for the scan to complete
+    max_retries = 10
+    retry_delay = 30  # seconds
+    for attempt in range(max_retries):
+        time.sleep(retry_delay)
+        report = get_urlscan_report(scan_id)
+        if "error" not in report:
+            return report
+        if "Scan is not finished yet" in report.get("error", ""):
+            print(f"Attempt {attempt + 1}/{max_retries}: Scan is not finished yet. Retrying in {retry_delay} seconds...")
+        else:
+            print(f"Error retrieving report: {report['error']}")
+            return report
+
+    return {"error": "Failed to retrieve URLScan.io report after multiple attempts"}
+
 
 # Function to query AbuseIPDB for an IP address
 def query_abuseipdb(ip):
@@ -333,13 +423,14 @@ def display_banner():
   _| |_| | | \__ \ | (_| | | | | |_       | |__| |____) |_| |_| |\  |  | |   
  |_____|_| |_|___/_|\__, |_| |_|\__|       \____/|_____/|_____|_| \_|  |_|   
                      __/ |                                                   
-                    |___/                                                                   
-            SOC Analyst All-in-One Investigation Tool
-          ------------------------------------------------
-          - OSINT | Threat Intelligence | Incident Response
-          - Integrated APIs: VirusTotal, URLScan, AbuseIP DB and more!
-          - Developed for fast and efficient IOC analysis
-          ------------------------------------------------
+                    |___/  
+                                                                                     
+                 SOC Analyst All-in-One Investigation Tool
+         ------------------------------------------------------------
+         - OSINT | Threat Intelligence | Incident Response
+         - Integrated APIs: VirusTotal, URLScan, AbuseIP DB and more!
+         - Developed for fast and efficient IOC analysis
+         ------------------------------------------------------------
      """
     print(banner)
 
@@ -400,17 +491,17 @@ def main():
                 print(f"\nGathering Intel for Domain: {ioc}\n")
                 futures.append(executor.submit(query_virustotal_domain, ioc))
                 futures.append(executor.submit(query_alienvault_domain, ioc))
-            elif ioc_type == "url":
+            elif ioc_type == "URL":
                 print(f"\nGathering Intel for URL: {ioc}\n")
                 print("Please wait while the URL is being scanned...\n")
                 futures.append(executor.submit(query_virustotal_url, ioc))
                 futures.append(executor.submit(submit_and_query_urlscan, ioc))
-            elif ioc_type in ["md5", "sha1", "sha256"]:
+            elif ioc_type in ["MD5", "SHA1", "SHA256"]:
                 print(f"\nGathering Intel for Hash ({ioc_type.upper()}): {ioc}\n")
                 futures.append(executor.submit(query_virustotal_hash, ioc))
                 futures.append(executor.submit(query_alienvault_hash, ioc))
                 futures.append(executor.submit(query_hybrid_analysis_hash, ioc))
-            elif ioc_type == "email":
+            elif ioc_type == "Email":
                 print(f"\nGathering Intel for Email: {ioc}\n")
                 # Add any email-specific queries here if needed
             else:
