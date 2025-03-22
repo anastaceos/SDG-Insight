@@ -109,7 +109,7 @@ def query_alienvault_ip(ioc, ioc_type):
         "alienvault: pulse_count": data.get("pulse_info", {}).get("count", 0),
         "alienvault: tags": tags,
         "alienvault: name": names,
-        "alienvault: permalink": f"https://otx.alienvault.com/indicator/{ioc_type}/{ioc}"
+        "alienvault: permalink": f"https://otx.alienvault.com/indicator/ip/{ioc}"
     }
 
 # Function to query AlienVault OTX for a domain
@@ -319,7 +319,8 @@ def query_abuseipdb(ip):
         "abuseipdb: last_report": data.get("lastReportedAt", "Unknown"),
         "abuseipdb: is_public": data.get("isPublic", "Unknown"),
         "abuseipdb: isTor": data.get("isTor", "Unknown"),
-        "abuseipdb: isProxy": data.get("isProxy", "Unknown")
+        "abuseipdb: isProxy": data.get("isProxy", "Unknown"),
+        "abuseipdb: permalink": f"https://www.abuseipdb.com/check/{ip}"  # Add permalink
     }
 
 # Function to query Hybrid Analysis for a file hash
