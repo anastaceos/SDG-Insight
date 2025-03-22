@@ -14,6 +14,14 @@ import concurrent.futures
 import logging
 from tabulate import tabulate
 
+# Configure logging to write both INFO and ERROR messages to the same file
+logging.basicConfig(
+    filename='error.log',  # Log file name
+    level=logging.INFO,  # Log all messages of level INFO and above
+    format='%(asctime)s - %(levelname)s - %(message)s',  # Log format
+    datefmt='%Y-%m-%d %H:%M:%S'  # Date format
+)
+
 #load_dotenv()  # Load API keys from a .env file
 
 #VIRUSTOTAL_API_KEY = os.getenv("VIRUSTOTAL_API_KEY")
@@ -79,6 +87,7 @@ def query_api(url, headers, params=None, data=None, method="GET"):
         elif method == "POST":
             response = requests.post(url, headers=headers, data=data)
         response.raise_for_status()
+        logging.info(f"Successful API request: {url}")
         return response.json()
     except requests.RequestException as e:
         logging.error(f"API request failed: {e}")
@@ -144,6 +153,8 @@ def query_alienvault_hash(ioc):
 # Function to query VirusTotal for a URL
 def query_virustotal_url(url):
     submit_url = "https://www.virustotal.com/api/v3/urls"
+    # Encode the URL in base64 format as required by VirusTotal
+    encoded_url = base64.urlsafe_b64encode(url.encode()).decode().strip("=")
     response = query_api(submit_url, VT_HEADERS, data={"url": url}, method="POST")
     if "error" in response:
         return response
@@ -160,10 +171,12 @@ def query_virustotal_url(url):
         return report_response
 
     report_data = report_response.get("data", {}).get("attributes", {})
-    #print(json.dumps(report_data, indent=4))
+    permalink = f"https://www.virustotal.com/gui/url/{encoded_url}"  # Construct the permalink
     return {
-        #"virustotal: status": report_data.get("status"),
-        "virustotal: reputation": report_data.get("stats"),
+        "virustotal: reputation": report_data.get("stats", {}),
+        "virustotal: malicious_vote": report_data.get("votes", {}).get("malicious", 0),
+        "virustotal: harmless_vote": report_data.get("votes", {}).get("harmless", 0),
+        "virustotal: permalink": permalink
     }
 
 # Function to query VirusTotal for an IP address
@@ -174,13 +187,15 @@ def query_virustotal_ip(ip):
         return response
 
     data = response.get("data", {}).get("attributes", {})
+    permalink = f"https://www.virustotal.com/gui/ip-address/{ip}"  # Construct the permalink
     return {
         "virustotal: country": data.get("country", "Unknown"),
         "virustotal: as_owner": data.get("as_owner", "Unknown"),
         "virustotal: reputation": data.get("last_analysis_stats", {}),
         "virustotal: malicious_vote": data.get("total_votes", {}).get("malicious", 0),
         "virustotal: harmless_vote": data.get("total_votes", {}).get("harmless", 0),
-        "virustotal: tags": data.get("tags", [])
+        "virustotal: tags": data.get("tags", []),
+        "virustotal: permalink": permalink
     }
 
 # Function to query VirusTotal for a file hash
@@ -191,11 +206,13 @@ def query_virustotal_hash(file_hash):
         return response
 
     data = response.get("data", {}).get("attributes", {})
+    permalink = f"https://www.virustotal.com/gui/file/{file_hash}"  # Construct the permalink
     return {
         "virustotal: reputation": data.get("last_analysis_stats", {}),
         "virustotal: malicious_vote": data.get("total_votes", {}).get("malicious", 0),
         "virustotal: harmless_vote": data.get("total_votes", {}).get("harmless", 0),
-        "virustotal: tags": data.get("tags", [])
+        "virustotal: tags": data.get("tags", []),
+        "virustotal: permalink": permalink
     }
 
 # Function to query VirusTotal for a domain
@@ -206,86 +223,17 @@ def query_virustotal_domain(domain):
         return response
 
     data = response.get("data", {}).get("attributes", {})
+    permalink = f"https://www.virustotal.com/gui/domain/{domain}"  # Construct the permalink
     return {
         "virustotal: categories": data.get("categories", "Unknown"),
         "virustotal: registrar": data.get("registrar", "Unknown"),
         "virustotal: reputation": data.get("last_analysis_stats", {}),
         "virustotal: malicious_vote": data.get("total_votes", {}).get("malicious", 0),
         "virustotal: harmless_vote": data.get("total_votes", {}).get("harmless", 0),
-        "virustotal: tags": data.get("tags", [])
+        "virustotal: tags": data.get("tags", []),
+        "virustotal: permalink": permalink
     }
 
-'''
-def submit_urlscan(url):
-    submit_url = "https://urlscan.io/api/v1/scan/"
-    payload = {"url": url, "visibility": "public"}
-    response = query_api(submit_url, URLSCAN_HEADERS, data=json.dumps(payload), method="POST")
-    if "error" in response:
-        return response
-
-    return {
-        "url": url,
-        "scan_id": response.get("uuid"),
-        "urlscan_permalink": response.get("result")
-    }
-
-def get_urlscan_report(scan_id):
-    report_url = f"https://urlscan.io/api/v1/result/{scan_id}/"
-    response = query_api(report_url, URLSCAN_HEADERS)
-    if "error" in response:
-        return response
-
-    data = response
-    return {
-        #"urlscan: status": data.get("task", {}).get("status"),
-        "urlscan: score": data.get("verdicts", {}).get("urlscan", "Unknown"),
-        "urlscan: ip stats": data.get("stats", {}).get("ipStats", {}),
-        "urlscan: domain": data.get("stats", {}).get("domainStats", {}),
-        "urlscan: categories": data.get("verdicts", {}).get("categories", []),
-        "urlscan: tags": data.get("verdicts", {}).get("overall", {}).get("tags", []),
-        "urlscan: malicious": data.get("verdicts", {}).get("overall", {}).get("malicious", False),
-        "urlscan: screenshot url": data.get("task", {}).get("screenshotURL", "N/A"),
-        "urlscan: permalink": f"https://urlscan.io/result/{scan_id}/"
-    }
-
-def submit_and_query_urlscan(url):
-    submission = submit_urlscan(url)
-    if "error" in submission:
-        return submission
-
-    scan_id = submission.get("scan_id")
-    if not scan_id:
-        return {"error": "Failed to extract scan ID from URLScan.io response"}
-
-    print(f"Scan submitted. Scan ID: {scan_id}. Waiting for the scan to complete...")
-
-    # Retry mechanism to wait for the scan to complete
-    max_retries = 10
-    retry_delay = 30  # seconds
-    for attempt in range(max_retries):
-        time.sleep(retry_delay)
-        report = get_urlscan_report(scan_id)
-        if "errors" not in report:
-            return report
-        if "Scan is not finished yet" in report["errors"]:
-            print(f"Attempt {attempt + 1}/{max_retries}: Scan is not finished yet. Retrying in {retry_delay} seconds...")
-        else:
-            print(f"Error retrieving report: {report['errors']}")
-            return report
-
-    return {"error": "Failed to retrieve URLScan.io report after multiple attempts"}
-'''
-'''
-    submission = submit_urlscan(url)
-    if "error" in submission:
-        return submission
-
-    scan_id = submission.get("scan_id")
-    time.sleep(60)  # Wait for URLScan.io to process the request
-
-    report = get_urlscan_report(scan_id)
-    return report    
-'''
 # Function to submit a URL to URLScan.io and retrieve the report
 def submit_urlscan(url):
     submit_url = "https://urlscan.io/api/v1/scan/"
@@ -323,13 +271,15 @@ def get_urlscan_report(scan_id):
 def submit_and_query_urlscan(url):
     submission = submit_urlscan(url)
     if "error" in submission:
+        logging.error(f"Error during URL submission: {submission['error']}")
         return submission
 
     scan_id = submission.get("scan_id")
     if not scan_id:
+        logging.error("Failed to extract scan ID from URLScan.io response")
         return {"error": "Failed to extract scan ID from URLScan.io response"}
 
-    print(f"Scan submitted. Scan ID: {scan_id}. Waiting for the scan to complete...")
+    logging.info(f"Scan submitted. Scan ID: {scan_id}. Waiting for the scan to complete...")
 
     # Retry mechanism to wait for the scan to complete
     max_retries = 10
@@ -340,11 +290,12 @@ def submit_and_query_urlscan(url):
         if "error" not in report:
             return report
         if "Scan is not finished yet" in report.get("error", ""):
-            print(f"Attempt {attempt + 1}/{max_retries}: Scan is not finished yet. Retrying in {retry_delay} seconds...")
+            logging.info(f"Attempt {attempt + 1}/{max_retries}: Scan is not finished yet. Retrying in {retry_delay} seconds...")
         else:
-            print(f"Error retrieving report: {report['error']}")
+            logging.error(f"Error retrieving report: {report['error']}")
             return report
 
+    logging.error("Failed to retrieve URLScan.io report after multiple attempts")
     return {"error": "Failed to retrieve URLScan.io report after multiple attempts"}
 
 
@@ -436,7 +387,7 @@ def display_banner():
 
 # Function to format results as a table using the tabulate library
 def format_results_as_table(results):
-    def split_into_lines(value, length=150):
+    def split_into_lines(value, length=200):
         if isinstance(value, str) and len(value) > length:
             return '\n'.join([value[i:i+length] for i in range(0, len(value), length)])
         return value
@@ -448,21 +399,31 @@ def format_results_as_table(results):
                 formatted_dict.append(f"{' ' * indent}{k}: {format_value(v, indent + 2)}")
             return '\n'.join(formatted_dict)
         elif isinstance(value, list):
-            unique_values = list(dict.fromkeys(map(str, value)))  # Remove duplicates while preserving order
+            # Filter out empty or None values from the list
+            filtered_values = [item for item in value if item]
+            if not filtered_values:
+                return "N/A"  # Return "N/A" if the list is empty
+            unique_values = list(dict.fromkeys(map(str, filtered_values)))  # Remove duplicates while preserving order
             formatted_list = [f"{' ' * indent}- {item}" for item in unique_values]
             return '\n'.join(formatted_list)
+        elif value in [None, ""]:
+            return "N/A"  # Return "N/A" for empty or None values
         return str(value)
 
     table = []
     for key, value in results.items():
+        # Skip entries where the value contains "error"
+        if isinstance(value, str) and "error" in value.lower():
+            continue
+
         if ": " in key:
             tool, field = key.split(": ", 1)
         else:
-            tool, field = "", key
+            tool, field = "Insight-OSINT", key
         formatted_value = format_value(value)
         split_value = split_into_lines(formatted_value)
         table.append([tool, field, split_value])
-    return tabulate(table, headers=["Tool", "Field", "Value"], tablefmt="grid")
+    return tabulate(table, headers=["Source", "Attribute", "Details"], tablefmt="grid")
 
 # Main function that processes IOCs
 def main():
@@ -473,8 +434,7 @@ def main():
             break
 
         # Determine the type of IOC
-        # Strip any leading/trailing whitespace
-        ioc = ioc.strip()    
+        ioc = ioc.strip()
         ioc_type = determine_ioc_type(ioc)
         result = {"input": ioc, "type": ioc_type}
         
@@ -509,11 +469,18 @@ def main():
                 continue
             
             for future in concurrent.futures.as_completed(futures):
-                result.update(future.result())
+                query_result = future.result()
+                result.update(query_result)
+                
+                # Log successful or failed queries
+                for key, value in query_result.items():
+                    if "error" in str(value).lower():
+                        logging.error(f"Failed query for {key}: {value}")
+                    else:
+                        logging.info(f"Successful query for {key}: {value}")
             
-            #print(json.dumps(result, indent=4))
-
             print(format_results_as_table(result))
+            logging.info(f"Final results for IOC {ioc}: {result}")
 
 if __name__ == "__main__":
     display_banner()
