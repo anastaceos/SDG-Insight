@@ -460,3 +460,248 @@
 2025-03-23 22:43:44 - INFO - Successful query for alienvault: name: ['SSH Brute-Force Honeypot Live', 'Honeypot Data - March 2025 - Cowrie', 'Fakelabs Honeynet Project', 'SSH honeypot logs for 2025-03-13', 'Automated Threat Intelligence - Brute-force hosts for 2025-03-05', '2025-02-25 Fail2Ban 7f878580-d43a-47bc-83d8-d3df7afdafdc']
 2025-03-23 22:43:44 - INFO - Successful query for alienvault: permalink: https://otx.alienvault.com/indicator/ip/118.122.147.8
 2025-03-23 22:43:44 - INFO - Final results for IOC 118.122.147.8: {'input': '118.122.147.8', 'type': 'IPv4', 'shodan: ip': '118.122.147.8', 'shodan: country': 'China', 'shodan: organization': 'CHINANET Sichuan province network', 'shodan: open_ports': [1701, 22], 'shodan: vulnerabilities': ['CVE-2023-51385', 'CVE-2016-20012', 'CVE-2018-15919', 'CVE-2017-15906', 'CVE-2021-36368', 'CVE-2023-51767', 'CVE-2018-20685', 'CVE-2018-15473', 'CVE-2020-14145', 'CVE-2020-15778', 'CVE-2023-48795', 'CVE-2023-38408', 'CVE-2007-2768', 'CVE-2008-3844', 'CVE-2019-6111', 'CVE-2019-6110', 'CVE-2021-41617', 'CVE-2019-6109'], 'shodan: hostnames': [], 'shodan: permalink': 'https://www.shodan.io/host/118.122.147.8', 'abuseipdb: abuse_confidence': 100, 'abuseipdb: total_reports': 863, 'abuseipdb: country': 'CN', 'abuseipdb: usage_type': 'Data Center/Web Hosting/Transit', 'abuseipdb: isp': 'CHINANET Sichuan province network', 'abuseipdb: domain': 'chinatelecom.cn', 'abuseipdb: hostnames': [], 'abuseipdb: last_report': '2025-03-23T10:43:08+00:00', 'abuseipdb: is_public': True, 'abuseipdb: isTor': False, 'abuseipdb: isProxy': 'Unknown', 'abuseipdb: permalink': 'https://www.abuseipdb.com/check/118.122.147.8', 'virustotal: country': 'CN', 'virustotal: as_owner': 'CHINANET SiChuan Telecom Internet Data Center', 'virustotal: reputation': {'malicious': 11, 'suspicious': 4, 'undetected': 26, 'harmless': 53, 'timeout': 0}, 'virustotal: malicious_vote': 3, 'virustotal: harmless_vote': 0, 'virustotal: tags': [], 'virustotal: permalink': 'https://www.virustotal.com/gui/ip-address/118.122.147.8', 'alienvault: pulse_count': 6, 'alienvault: tags': ['Bruteforce', 'Brute-Force', 'SSH', 'Honeypot', 'cowrie', 'ssh', 'malicious', 'sftp', 'cowrie', 'ssh', 'honeypot', 'SSH', 'bruteforce', 'honeypot', 'brute force', 'ssh'], 'alienvault: name': ['SSH Brute-Force Honeypot Live', 'Honeypot Data - March 2025 - Cowrie', 'Fakelabs Honeynet Project', 'SSH honeypot logs for 2025-03-13', 'Automated Threat Intelligence - Brute-force hosts for 2025-03-05', '2025-02-25 Fail2Ban 7f878580-d43a-47bc-83d8-d3df7afdafdc'], 'alienvault: permalink': 'https://otx.alienvault.com/indicator/ip/118.122.147.8'}
+2025-03-23 22:46:55 - INFO - Successful API request: https://api.shodan.io/shodan/host/118.122.147.8?key=Pc0gdLR5F1JXVSPLRDazU6u50YMjbUNW
+2025-03-23 22:46:55 - INFO - Successful query for shodan: ip: 118.122.147.8
+2025-03-23 22:46:55 - INFO - Successful query for shodan: country: China
+2025-03-23 22:46:55 - INFO - Successful query for shodan: organization: CHINANET Sichuan province network
+2025-03-23 22:46:55 - INFO - Successful query for shodan: open_ports: [1701, 22]
+2025-03-23 22:46:55 - INFO - Successful query for shodan: vulnerabilities: ['CVE-2023-51385', 'CVE-2016-20012', 'CVE-2018-15919', 'CVE-2017-15906', 'CVE-2021-36368', 'CVE-2023-51767', 'CVE-2018-20685', 'CVE-2018-15473', 'CVE-2020-14145', 'CVE-2020-15778', 'CVE-2023-48795', 'CVE-2023-38408', 'CVE-2007-2768', 'CVE-2008-3844', 'CVE-2019-6111', 'CVE-2019-6110', 'CVE-2021-41617', 'CVE-2019-6109']
+2025-03-23 22:46:55 - INFO - Successful query for shodan: hostnames: []
+2025-03-23 22:46:55 - INFO - Successful query for shodan: permalink: https://www.shodan.io/host/118.122.147.8
+2025-03-23 22:46:56 - INFO - Successful API request: https://api.abuseipdb.com/api/v2/check
+2025-03-23 22:46:56 - INFO - Successful query for abuseipdb: abuse_confidence: 100
+2025-03-23 22:46:56 - INFO - Successful query for abuseipdb: total_reports: 863
+2025-03-23 22:46:56 - INFO - Successful query for abuseipdb: country: CN
+2025-03-23 22:46:56 - INFO - Successful query for abuseipdb: usage_type: Data Center/Web Hosting/Transit
+2025-03-23 22:46:56 - INFO - Successful query for abuseipdb: isp: CHINANET Sichuan province network
+2025-03-23 22:46:56 - INFO - Successful query for abuseipdb: domain: chinatelecom.cn
+2025-03-23 22:46:56 - INFO - Successful query for abuseipdb: hostnames: []
+2025-03-23 22:46:56 - INFO - Successful query for abuseipdb: last_report: 2025-03-23T10:43:08+00:00
+2025-03-23 22:46:56 - INFO - Successful query for abuseipdb: is_public: True
+2025-03-23 22:46:56 - INFO - Successful query for abuseipdb: isTor: False
+2025-03-23 22:46:56 - INFO - Successful query for abuseipdb: isProxy: Unknown
+2025-03-23 22:46:56 - INFO - Successful query for abuseipdb: permalink: https://www.abuseipdb.com/check/118.122.147.8
+2025-03-23 22:46:56 - INFO - Successful API request: https://otx.alienvault.com/api/v1/indicators/IPv4/118.122.147.8/general
+2025-03-23 22:46:56 - INFO - Successful query for alienvault: pulse_count: 6
+2025-03-23 22:46:56 - INFO - Successful query for alienvault: tags: ['cowrie', 'ssh', 'malicious', 'sftp', 'Bruteforce', 'Brute-Force', 'SSH', 'Honeypot', 'cowrie', 'ssh', 'honeypot', 'SSH', 'bruteforce', 'honeypot', 'brute force', 'ssh']
+2025-03-23 22:46:56 - INFO - Successful query for alienvault: name: ['Honeypot Data - March 2025 - Cowrie', 'SSH Brute-Force Honeypot Live', 'Fakelabs Honeynet Project', 'SSH honeypot logs for 2025-03-13', 'Automated Threat Intelligence - Brute-force hosts for 2025-03-05', '2025-02-25 Fail2Ban 7f878580-d43a-47bc-83d8-d3df7afdafdc']
+2025-03-23 22:46:56 - INFO - Successful query for alienvault: permalink: https://otx.alienvault.com/indicator/ip/118.122.147.8
+2025-03-23 22:46:56 - INFO - Successful API request: https://www.virustotal.com/api/v3/ip_addresses/118.122.147.8
+2025-03-23 22:46:56 - INFO - Successful query for virustotal: country: CN
+2025-03-23 22:46:56 - INFO - Successful query for virustotal: as_owner: CHINANET SiChuan Telecom Internet Data Center
+2025-03-23 22:46:56 - INFO - Successful query for virustotal: reputation: {'malicious': 11, 'suspicious': 4, 'undetected': 26, 'harmless': 53, 'timeout': 0}
+2025-03-23 22:46:56 - INFO - Successful query for virustotal: malicious_vote: 3
+2025-03-23 22:46:56 - INFO - Successful query for virustotal: harmless_vote: 0
+2025-03-23 22:46:56 - INFO - Successful query for virustotal: tags: []
+2025-03-23 22:46:56 - INFO - Successful query for virustotal: permalink: https://www.virustotal.com/gui/ip-address/118.122.147.8
+2025-03-23 22:46:56 - INFO - Final results for IOC 118.122.147.8: {'input': '118.122.147.8', 'type': 'IPv4', 'shodan: ip': '118.122.147.8', 'shodan: country': 'China', 'shodan: organization': 'CHINANET Sichuan province network', 'shodan: open_ports': [1701, 22], 'shodan: vulnerabilities': ['CVE-2023-51385', 'CVE-2016-20012', 'CVE-2018-15919', 'CVE-2017-15906', 'CVE-2021-36368', 'CVE-2023-51767', 'CVE-2018-20685', 'CVE-2018-15473', 'CVE-2020-14145', 'CVE-2020-15778', 'CVE-2023-48795', 'CVE-2023-38408', 'CVE-2007-2768', 'CVE-2008-3844', 'CVE-2019-6111', 'CVE-2019-6110', 'CVE-2021-41617', 'CVE-2019-6109'], 'shodan: hostnames': [], 'shodan: permalink': 'https://www.shodan.io/host/118.122.147.8', 'abuseipdb: abuse_confidence': 100, 'abuseipdb: total_reports': 863, 'abuseipdb: country': 'CN', 'abuseipdb: usage_type': 'Data Center/Web Hosting/Transit', 'abuseipdb: isp': 'CHINANET Sichuan province network', 'abuseipdb: domain': 'chinatelecom.cn', 'abuseipdb: hostnames': [], 'abuseipdb: last_report': '2025-03-23T10:43:08+00:00', 'abuseipdb: is_public': True, 'abuseipdb: isTor': False, 'abuseipdb: isProxy': 'Unknown', 'abuseipdb: permalink': 'https://www.abuseipdb.com/check/118.122.147.8', 'alienvault: pulse_count': 6, 'alienvault: tags': ['cowrie', 'ssh', 'malicious', 'sftp', 'Bruteforce', 'Brute-Force', 'SSH', 'Honeypot', 'cowrie', 'ssh', 'honeypot', 'SSH', 'bruteforce', 'honeypot', 'brute force', 'ssh'], 'alienvault: name': ['Honeypot Data - March 2025 - Cowrie', 'SSH Brute-Force Honeypot Live', 'Fakelabs Honeynet Project', 'SSH honeypot logs for 2025-03-13', 'Automated Threat Intelligence - Brute-force hosts for 2025-03-05', '2025-02-25 Fail2Ban 7f878580-d43a-47bc-83d8-d3df7afdafdc'], 'alienvault: permalink': 'https://otx.alienvault.com/indicator/ip/118.122.147.8', 'virustotal: country': 'CN', 'virustotal: as_owner': 'CHINANET SiChuan Telecom Internet Data Center', 'virustotal: reputation': {'malicious': 11, 'suspicious': 4, 'undetected': 26, 'harmless': 53, 'timeout': 0}, 'virustotal: malicious_vote': 3, 'virustotal: harmless_vote': 0, 'virustotal: tags': [], 'virustotal: permalink': 'https://www.virustotal.com/gui/ip-address/118.122.147.8'}
+2025-03-23 22:48:19 - INFO - Successful API request: https://api.shodan.io/shodan/host/118.122.147.8?key=Pc0gdLR5F1JXVSPLRDazU6u50YMjbUNW
+2025-03-23 22:48:19 - INFO - Successful query for shodan: ip: 118.122.147.8
+2025-03-23 22:48:19 - INFO - Successful query for shodan: country: China
+2025-03-23 22:48:19 - INFO - Successful query for shodan: organization: CHINANET Sichuan province network
+2025-03-23 22:48:19 - INFO - Successful query for shodan: open_ports: [1701, 22]
+2025-03-23 22:48:19 - INFO - Successful query for shodan: vulnerabilities: ['CVE-2023-51385', 'CVE-2016-20012', 'CVE-2018-15919', 'CVE-2017-15906', 'CVE-2021-36368', 'CVE-2023-51767', 'CVE-2018-20685', 'CVE-2018-15473', 'CVE-2020-14145', 'CVE-2020-15778', 'CVE-2023-48795', 'CVE-2023-38408', 'CVE-2007-2768', 'CVE-2008-3844', 'CVE-2019-6111', 'CVE-2019-6110', 'CVE-2021-41617', 'CVE-2019-6109']
+2025-03-23 22:48:19 - INFO - Successful query for shodan: hostnames: []
+2025-03-23 22:48:19 - INFO - Successful query for shodan: permalink: https://www.shodan.io/host/118.122.147.8
+2025-03-23 22:48:20 - INFO - Successful API request: https://api.abuseipdb.com/api/v2/check
+2025-03-23 22:48:20 - INFO - Successful query for abuseipdb: abuse_confidence: 100
+2025-03-23 22:48:20 - INFO - Successful query for abuseipdb: total_reports: 863
+2025-03-23 22:48:20 - INFO - Successful query for abuseipdb: country: CN
+2025-03-23 22:48:20 - INFO - Successful query for abuseipdb: usage_type: Data Center/Web Hosting/Transit
+2025-03-23 22:48:20 - INFO - Successful query for abuseipdb: isp: CHINANET Sichuan province network
+2025-03-23 22:48:20 - INFO - Successful query for abuseipdb: domain: chinatelecom.cn
+2025-03-23 22:48:20 - INFO - Successful query for abuseipdb: hostnames: []
+2025-03-23 22:48:20 - INFO - Successful query for abuseipdb: last_report: 2025-03-23T10:43:08+00:00
+2025-03-23 22:48:20 - INFO - Successful query for abuseipdb: is_public: True
+2025-03-23 22:48:20 - INFO - Successful query for abuseipdb: isTor: False
+2025-03-23 22:48:20 - INFO - Successful query for abuseipdb: isProxy: Unknown
+2025-03-23 22:48:20 - INFO - Successful query for abuseipdb: permalink: https://www.abuseipdb.com/check/118.122.147.8
+2025-03-23 22:48:20 - INFO - Successful API request: https://otx.alienvault.com/api/v1/indicators/IPv4/118.122.147.8/general
+2025-03-23 22:48:20 - INFO - Successful query for alienvault: pulse_count: 6
+2025-03-23 22:48:20 - INFO - Successful query for alienvault: tags: ['Bruteforce', 'Brute-Force', 'SSH', 'Honeypot', 'cowrie', 'ssh', 'malicious', 'sftp', 'cowrie', 'ssh', 'honeypot', 'SSH', 'bruteforce', 'honeypot', 'brute force', 'ssh']
+2025-03-23 22:48:20 - INFO - Successful query for alienvault: name: ['SSH Brute-Force Honeypot Live', 'Honeypot Data - March 2025 - Cowrie', 'Fakelabs Honeynet Project', 'SSH honeypot logs for 2025-03-13', 'Automated Threat Intelligence - Brute-force hosts for 2025-03-05', '2025-02-25 Fail2Ban 7f878580-d43a-47bc-83d8-d3df7afdafdc']
+2025-03-23 22:48:20 - INFO - Successful query for alienvault: permalink: https://otx.alienvault.com/indicator/ip/118.122.147.8
+2025-03-23 22:48:20 - INFO - Successful API request: https://www.virustotal.com/api/v3/ip_addresses/118.122.147.8
+2025-03-23 22:48:20 - INFO - Successful query for virustotal: country: CN
+2025-03-23 22:48:20 - INFO - Successful query for virustotal: as_owner: CHINANET SiChuan Telecom Internet Data Center
+2025-03-23 22:48:20 - INFO - Successful query for virustotal: reputation: {'malicious': 11, 'suspicious': 4, 'undetected': 26, 'harmless': 53, 'timeout': 0}
+2025-03-23 22:48:20 - INFO - Successful query for virustotal: malicious_vote: 3
+2025-03-23 22:48:20 - INFO - Successful query for virustotal: harmless_vote: 0
+2025-03-23 22:48:20 - INFO - Successful query for virustotal: tags: []
+2025-03-23 22:48:20 - INFO - Successful query for virustotal: permalink: https://www.virustotal.com/gui/ip-address/118.122.147.8
+2025-03-23 22:48:20 - INFO - Final results for IOC 118.122.147.8: {'input': '118.122.147.8', 'type': 'IPv4', 'shodan: ip': '118.122.147.8', 'shodan: country': 'China', 'shodan: organization': 'CHINANET Sichuan province network', 'shodan: open_ports': [1701, 22], 'shodan: vulnerabilities': ['CVE-2023-51385', 'CVE-2016-20012', 'CVE-2018-15919', 'CVE-2017-15906', 'CVE-2021-36368', 'CVE-2023-51767', 'CVE-2018-20685', 'CVE-2018-15473', 'CVE-2020-14145', 'CVE-2020-15778', 'CVE-2023-48795', 'CVE-2023-38408', 'CVE-2007-2768', 'CVE-2008-3844', 'CVE-2019-6111', 'CVE-2019-6110', 'CVE-2021-41617', 'CVE-2019-6109'], 'shodan: hostnames': [], 'shodan: permalink': 'https://www.shodan.io/host/118.122.147.8', 'abuseipdb: abuse_confidence': 100, 'abuseipdb: total_reports': 863, 'abuseipdb: country': 'CN', 'abuseipdb: usage_type': 'Data Center/Web Hosting/Transit', 'abuseipdb: isp': 'CHINANET Sichuan province network', 'abuseipdb: domain': 'chinatelecom.cn', 'abuseipdb: hostnames': [], 'abuseipdb: last_report': '2025-03-23T10:43:08+00:00', 'abuseipdb: is_public': True, 'abuseipdb: isTor': False, 'abuseipdb: isProxy': 'Unknown', 'abuseipdb: permalink': 'https://www.abuseipdb.com/check/118.122.147.8', 'alienvault: pulse_count': 6, 'alienvault: tags': ['Bruteforce', 'Brute-Force', 'SSH', 'Honeypot', 'cowrie', 'ssh', 'malicious', 'sftp', 'cowrie', 'ssh', 'honeypot', 'SSH', 'bruteforce', 'honeypot', 'brute force', 'ssh'], 'alienvault: name': ['SSH Brute-Force Honeypot Live', 'Honeypot Data - March 2025 - Cowrie', 'Fakelabs Honeynet Project', 'SSH honeypot logs for 2025-03-13', 'Automated Threat Intelligence - Brute-force hosts for 2025-03-05', '2025-02-25 Fail2Ban 7f878580-d43a-47bc-83d8-d3df7afdafdc'], 'alienvault: permalink': 'https://otx.alienvault.com/indicator/ip/118.122.147.8', 'virustotal: country': 'CN', 'virustotal: as_owner': 'CHINANET SiChuan Telecom Internet Data Center', 'virustotal: reputation': {'malicious': 11, 'suspicious': 4, 'undetected': 26, 'harmless': 53, 'timeout': 0}, 'virustotal: malicious_vote': 3, 'virustotal: harmless_vote': 0, 'virustotal: tags': [], 'virustotal: permalink': 'https://www.virustotal.com/gui/ip-address/118.122.147.8'}
+2025-03-23 22:48:52 - INFO - Successful API request: https://api.shodan.io/shodan/host/118.122.147.8?key=Pc0gdLR5F1JXVSPLRDazU6u50YMjbUNW
+2025-03-23 22:48:52 - INFO - Successful query for shodan: ip: 118.122.147.8
+2025-03-23 22:48:52 - INFO - Successful query for shodan: country: China
+2025-03-23 22:48:52 - INFO - Successful query for shodan: organization: CHINANET Sichuan province network
+2025-03-23 22:48:52 - INFO - Successful query for shodan: open_ports: [1701, 22]
+2025-03-23 22:48:52 - INFO - Successful query for shodan: vulnerabilities: ['CVE-2023-51385', 'CVE-2016-20012', 'CVE-2018-15919', 'CVE-2017-15906', 'CVE-2021-36368', 'CVE-2023-51767', 'CVE-2018-20685', 'CVE-2018-15473', 'CVE-2020-14145', 'CVE-2020-15778', 'CVE-2023-48795', 'CVE-2023-38408', 'CVE-2007-2768', 'CVE-2008-3844', 'CVE-2019-6111', 'CVE-2019-6110', 'CVE-2021-41617', 'CVE-2019-6109']
+2025-03-23 22:48:52 - INFO - Successful query for shodan: hostnames: []
+2025-03-23 22:48:52 - INFO - Successful query for shodan: permalink: https://www.shodan.io/host/118.122.147.8
+2025-03-23 22:48:53 - INFO - Successful API request: https://api.abuseipdb.com/api/v2/check
+2025-03-23 22:48:53 - INFO - Successful query for abuseipdb: abuse_confidence: 100
+2025-03-23 22:48:53 - INFO - Successful query for abuseipdb: total_reports: 863
+2025-03-23 22:48:53 - INFO - Successful query for abuseipdb: country: CN
+2025-03-23 22:48:53 - INFO - Successful query for abuseipdb: usage_type: Data Center/Web Hosting/Transit
+2025-03-23 22:48:53 - INFO - Successful query for abuseipdb: isp: CHINANET Sichuan province network
+2025-03-23 22:48:53 - INFO - Successful query for abuseipdb: domain: chinatelecom.cn
+2025-03-23 22:48:53 - INFO - Successful query for abuseipdb: hostnames: []
+2025-03-23 22:48:53 - INFO - Successful query for abuseipdb: last_report: 2025-03-23T10:43:08+00:00
+2025-03-23 22:48:53 - INFO - Successful query for abuseipdb: is_public: True
+2025-03-23 22:48:53 - INFO - Successful query for abuseipdb: isTor: False
+2025-03-23 22:48:53 - INFO - Successful query for abuseipdb: isProxy: Unknown
+2025-03-23 22:48:53 - INFO - Successful query for abuseipdb: permalink: https://www.abuseipdb.com/check/118.122.147.8
+2025-03-23 22:48:53 - INFO - Successful API request: https://otx.alienvault.com/api/v1/indicators/IPv4/118.122.147.8/general
+2025-03-23 22:48:53 - INFO - Successful query for alienvault: pulse_count: 6
+2025-03-23 22:48:53 - INFO - Successful query for alienvault: tags: ['Bruteforce', 'Brute-Force', 'SSH', 'Honeypot', 'cowrie', 'ssh', 'malicious', 'sftp', 'cowrie', 'ssh', 'honeypot', 'SSH', 'bruteforce', 'honeypot', 'brute force', 'ssh']
+2025-03-23 22:48:53 - INFO - Successful query for alienvault: name: ['SSH Brute-Force Honeypot Live', 'Honeypot Data - March 2025 - Cowrie', 'Fakelabs Honeynet Project', 'SSH honeypot logs for 2025-03-13', 'Automated Threat Intelligence - Brute-force hosts for 2025-03-05', '2025-02-25 Fail2Ban 7f878580-d43a-47bc-83d8-d3df7afdafdc']
+2025-03-23 22:48:53 - INFO - Successful query for alienvault: permalink: https://otx.alienvault.com/indicator/ip/118.122.147.8
+2025-03-23 22:48:53 - INFO - Successful API request: https://www.virustotal.com/api/v3/ip_addresses/118.122.147.8
+2025-03-23 22:48:53 - INFO - Successful query for virustotal: country: CN
+2025-03-23 22:48:53 - INFO - Successful query for virustotal: as_owner: CHINANET SiChuan Telecom Internet Data Center
+2025-03-23 22:48:53 - INFO - Successful query for virustotal: reputation: {'malicious': 11, 'suspicious': 4, 'undetected': 26, 'harmless': 53, 'timeout': 0}
+2025-03-23 22:48:53 - INFO - Successful query for virustotal: malicious_vote: 3
+2025-03-23 22:48:53 - INFO - Successful query for virustotal: harmless_vote: 0
+2025-03-23 22:48:53 - INFO - Successful query for virustotal: tags: []
+2025-03-23 22:48:53 - INFO - Successful query for virustotal: permalink: https://www.virustotal.com/gui/ip-address/118.122.147.8
+2025-03-23 22:48:53 - INFO - Final results for IOC 118.122.147.8: {'input': '118.122.147.8', 'type': 'IPv4', 'shodan: ip': '118.122.147.8', 'shodan: country': 'China', 'shodan: organization': 'CHINANET Sichuan province network', 'shodan: open_ports': [1701, 22], 'shodan: vulnerabilities': ['CVE-2023-51385', 'CVE-2016-20012', 'CVE-2018-15919', 'CVE-2017-15906', 'CVE-2021-36368', 'CVE-2023-51767', 'CVE-2018-20685', 'CVE-2018-15473', 'CVE-2020-14145', 'CVE-2020-15778', 'CVE-2023-48795', 'CVE-2023-38408', 'CVE-2007-2768', 'CVE-2008-3844', 'CVE-2019-6111', 'CVE-2019-6110', 'CVE-2021-41617', 'CVE-2019-6109'], 'shodan: hostnames': [], 'shodan: permalink': 'https://www.shodan.io/host/118.122.147.8', 'abuseipdb: abuse_confidence': 100, 'abuseipdb: total_reports': 863, 'abuseipdb: country': 'CN', 'abuseipdb: usage_type': 'Data Center/Web Hosting/Transit', 'abuseipdb: isp': 'CHINANET Sichuan province network', 'abuseipdb: domain': 'chinatelecom.cn', 'abuseipdb: hostnames': [], 'abuseipdb: last_report': '2025-03-23T10:43:08+00:00', 'abuseipdb: is_public': True, 'abuseipdb: isTor': False, 'abuseipdb: isProxy': 'Unknown', 'abuseipdb: permalink': 'https://www.abuseipdb.com/check/118.122.147.8', 'alienvault: pulse_count': 6, 'alienvault: tags': ['Bruteforce', 'Brute-Force', 'SSH', 'Honeypot', 'cowrie', 'ssh', 'malicious', 'sftp', 'cowrie', 'ssh', 'honeypot', 'SSH', 'bruteforce', 'honeypot', 'brute force', 'ssh'], 'alienvault: name': ['SSH Brute-Force Honeypot Live', 'Honeypot Data - March 2025 - Cowrie', 'Fakelabs Honeynet Project', 'SSH honeypot logs for 2025-03-13', 'Automated Threat Intelligence - Brute-force hosts for 2025-03-05', '2025-02-25 Fail2Ban 7f878580-d43a-47bc-83d8-d3df7afdafdc'], 'alienvault: permalink': 'https://otx.alienvault.com/indicator/ip/118.122.147.8', 'virustotal: country': 'CN', 'virustotal: as_owner': 'CHINANET SiChuan Telecom Internet Data Center', 'virustotal: reputation': {'malicious': 11, 'suspicious': 4, 'undetected': 26, 'harmless': 53, 'timeout': 0}, 'virustotal: malicious_vote': 3, 'virustotal: harmless_vote': 0, 'virustotal: tags': [], 'virustotal: permalink': 'https://www.virustotal.com/gui/ip-address/118.122.147.8'}
+2025-03-23 22:49:37 - INFO - Successful API request: https://api.shodan.io/shodan/host/118.122.147.8?key=Pc0gdLR5F1JXVSPLRDazU6u50YMjbUNW
+2025-03-23 22:49:37 - INFO - Successful query for shodan: ip: 118.122.147.8
+2025-03-23 22:49:37 - INFO - Successful query for shodan: country: China
+2025-03-23 22:49:37 - INFO - Successful query for shodan: organization: CHINANET Sichuan province network
+2025-03-23 22:49:37 - INFO - Successful query for shodan: open_ports: [1701, 22]
+2025-03-23 22:49:37 - INFO - Successful query for shodan: vulnerabilities: ['CVE-2023-51385', 'CVE-2016-20012', 'CVE-2018-15919', 'CVE-2017-15906', 'CVE-2021-36368', 'CVE-2023-51767', 'CVE-2018-20685', 'CVE-2018-15473', 'CVE-2020-14145', 'CVE-2020-15778', 'CVE-2023-48795', 'CVE-2023-38408', 'CVE-2007-2768', 'CVE-2008-3844', 'CVE-2019-6111', 'CVE-2019-6110', 'CVE-2021-41617', 'CVE-2019-6109']
+2025-03-23 22:49:37 - INFO - Successful query for shodan: hostnames: []
+2025-03-23 22:49:37 - INFO - Successful query for shodan: permalink: https://www.shodan.io/host/118.122.147.8
+2025-03-23 22:49:37 - INFO - Successful API request: https://api.abuseipdb.com/api/v2/check
+2025-03-23 22:49:37 - INFO - Successful query for abuseipdb: abuse_confidence: 100
+2025-03-23 22:49:37 - INFO - Successful query for abuseipdb: total_reports: 863
+2025-03-23 22:49:37 - INFO - Successful query for abuseipdb: country: CN
+2025-03-23 22:49:37 - INFO - Successful query for abuseipdb: usage_type: Data Center/Web Hosting/Transit
+2025-03-23 22:49:37 - INFO - Successful query for abuseipdb: isp: CHINANET Sichuan province network
+2025-03-23 22:49:37 - INFO - Successful query for abuseipdb: domain: chinatelecom.cn
+2025-03-23 22:49:37 - INFO - Successful query for abuseipdb: hostnames: []
+2025-03-23 22:49:37 - INFO - Successful query for abuseipdb: last_report: 2025-03-23T10:43:08+00:00
+2025-03-23 22:49:37 - INFO - Successful query for abuseipdb: is_public: True
+2025-03-23 22:49:37 - INFO - Successful query for abuseipdb: isTor: False
+2025-03-23 22:49:37 - INFO - Successful query for abuseipdb: isProxy: Unknown
+2025-03-23 22:49:37 - INFO - Successful query for abuseipdb: permalink: https://www.abuseipdb.com/check/118.122.147.8
+2025-03-23 22:49:37 - INFO - Successful API request: https://www.virustotal.com/api/v3/ip_addresses/118.122.147.8
+2025-03-23 22:49:37 - INFO - Successful query for virustotal: country: CN
+2025-03-23 22:49:37 - INFO - Successful query for virustotal: as_owner: CHINANET SiChuan Telecom Internet Data Center
+2025-03-23 22:49:37 - INFO - Successful query for virustotal: reputation: {'malicious': 11, 'suspicious': 4, 'undetected': 26, 'harmless': 53, 'timeout': 0}
+2025-03-23 22:49:37 - INFO - Successful query for virustotal: malicious_vote: 3
+2025-03-23 22:49:37 - INFO - Successful query for virustotal: harmless_vote: 0
+2025-03-23 22:49:37 - INFO - Successful query for virustotal: tags: []
+2025-03-23 22:49:37 - INFO - Successful query for virustotal: permalink: https://www.virustotal.com/gui/ip-address/118.122.147.8
+2025-03-23 22:49:38 - INFO - Successful API request: https://otx.alienvault.com/api/v1/indicators/IPv4/118.122.147.8/general
+2025-03-23 22:49:38 - INFO - Successful query for alienvault: pulse_count: 6
+2025-03-23 22:49:38 - INFO - Successful query for alienvault: tags: ['Bruteforce', 'Brute-Force', 'SSH', 'Honeypot', 'cowrie', 'ssh', 'malicious', 'sftp', 'cowrie', 'ssh', 'honeypot', 'SSH', 'bruteforce', 'honeypot', 'brute force', 'ssh']
+2025-03-23 22:49:38 - INFO - Successful query for alienvault: name: ['SSH Brute-Force Honeypot Live', 'Honeypot Data - March 2025 - Cowrie', 'Fakelabs Honeynet Project', 'SSH honeypot logs for 2025-03-13', 'Automated Threat Intelligence - Brute-force hosts for 2025-03-05', '2025-02-25 Fail2Ban 7f878580-d43a-47bc-83d8-d3df7afdafdc']
+2025-03-23 22:49:38 - INFO - Successful query for alienvault: permalink: https://otx.alienvault.com/indicator/ip/118.122.147.8
+2025-03-23 22:49:38 - INFO - Final results for IOC 118.122.147.8: {'input': '118.122.147.8', 'type': 'IPv4', 'shodan: ip': '118.122.147.8', 'shodan: country': 'China', 'shodan: organization': 'CHINANET Sichuan province network', 'shodan: open_ports': [1701, 22], 'shodan: vulnerabilities': ['CVE-2023-51385', 'CVE-2016-20012', 'CVE-2018-15919', 'CVE-2017-15906', 'CVE-2021-36368', 'CVE-2023-51767', 'CVE-2018-20685', 'CVE-2018-15473', 'CVE-2020-14145', 'CVE-2020-15778', 'CVE-2023-48795', 'CVE-2023-38408', 'CVE-2007-2768', 'CVE-2008-3844', 'CVE-2019-6111', 'CVE-2019-6110', 'CVE-2021-41617', 'CVE-2019-6109'], 'shodan: hostnames': [], 'shodan: permalink': 'https://www.shodan.io/host/118.122.147.8', 'abuseipdb: abuse_confidence': 100, 'abuseipdb: total_reports': 863, 'abuseipdb: country': 'CN', 'abuseipdb: usage_type': 'Data Center/Web Hosting/Transit', 'abuseipdb: isp': 'CHINANET Sichuan province network', 'abuseipdb: domain': 'chinatelecom.cn', 'abuseipdb: hostnames': [], 'abuseipdb: last_report': '2025-03-23T10:43:08+00:00', 'abuseipdb: is_public': True, 'abuseipdb: isTor': False, 'abuseipdb: isProxy': 'Unknown', 'abuseipdb: permalink': 'https://www.abuseipdb.com/check/118.122.147.8', 'virustotal: country': 'CN', 'virustotal: as_owner': 'CHINANET SiChuan Telecom Internet Data Center', 'virustotal: reputation': {'malicious': 11, 'suspicious': 4, 'undetected': 26, 'harmless': 53, 'timeout': 0}, 'virustotal: malicious_vote': 3, 'virustotal: harmless_vote': 0, 'virustotal: tags': [], 'virustotal: permalink': 'https://www.virustotal.com/gui/ip-address/118.122.147.8', 'alienvault: pulse_count': 6, 'alienvault: tags': ['Bruteforce', 'Brute-Force', 'SSH', 'Honeypot', 'cowrie', 'ssh', 'malicious', 'sftp', 'cowrie', 'ssh', 'honeypot', 'SSH', 'bruteforce', 'honeypot', 'brute force', 'ssh'], 'alienvault: name': ['SSH Brute-Force Honeypot Live', 'Honeypot Data - March 2025 - Cowrie', 'Fakelabs Honeynet Project', 'SSH honeypot logs for 2025-03-13', 'Automated Threat Intelligence - Brute-force hosts for 2025-03-05', '2025-02-25 Fail2Ban 7f878580-d43a-47bc-83d8-d3df7afdafdc'], 'alienvault: permalink': 'https://otx.alienvault.com/indicator/ip/118.122.147.8'}
+2025-03-23 22:50:11 - INFO - Successful API request: https://api.shodan.io/shodan/host/118.122.147.8?key=Pc0gdLR5F1JXVSPLRDazU6u50YMjbUNW
+2025-03-23 22:50:11 - INFO - Successful query for shodan: ip: 118.122.147.8
+2025-03-23 22:50:11 - INFO - Successful query for shodan: country: China
+2025-03-23 22:50:11 - INFO - Successful query for shodan: organization: CHINANET Sichuan province network
+2025-03-23 22:50:11 - INFO - Successful query for shodan: open_ports: [1701, 22]
+2025-03-23 22:50:11 - INFO - Successful query for shodan: vulnerabilities: ['CVE-2023-51385', 'CVE-2016-20012', 'CVE-2018-15919', 'CVE-2017-15906', 'CVE-2021-36368', 'CVE-2023-51767', 'CVE-2018-20685', 'CVE-2018-15473', 'CVE-2020-14145', 'CVE-2020-15778', 'CVE-2023-48795', 'CVE-2023-38408', 'CVE-2007-2768', 'CVE-2008-3844', 'CVE-2019-6111', 'CVE-2019-6110', 'CVE-2021-41617', 'CVE-2019-6109']
+2025-03-23 22:50:11 - INFO - Successful query for shodan: hostnames: []
+2025-03-23 22:50:11 - INFO - Successful query for shodan: permalink: https://www.shodan.io/host/118.122.147.8
+2025-03-23 22:50:11 - INFO - Successful API request: https://api.abuseipdb.com/api/v2/check
+2025-03-23 22:50:11 - INFO - Successful query for abuseipdb: abuse_confidence: 100
+2025-03-23 22:50:11 - INFO - Successful query for abuseipdb: total_reports: 863
+2025-03-23 22:50:11 - INFO - Successful query for abuseipdb: country: CN
+2025-03-23 22:50:11 - INFO - Successful query for abuseipdb: usage_type: Data Center/Web Hosting/Transit
+2025-03-23 22:50:11 - INFO - Successful query for abuseipdb: isp: CHINANET Sichuan province network
+2025-03-23 22:50:11 - INFO - Successful query for abuseipdb: domain: chinatelecom.cn
+2025-03-23 22:50:12 - INFO - Successful query for abuseipdb: hostnames: []
+2025-03-23 22:50:12 - INFO - Successful query for abuseipdb: last_report: 2025-03-23T10:43:08+00:00
+2025-03-23 22:50:12 - INFO - Successful query for abuseipdb: is_public: True
+2025-03-23 22:50:12 - INFO - Successful query for abuseipdb: isTor: False
+2025-03-23 22:50:12 - INFO - Successful query for abuseipdb: isProxy: Unknown
+2025-03-23 22:50:12 - INFO - Successful query for abuseipdb: permalink: https://www.abuseipdb.com/check/118.122.147.8
+2025-03-23 22:50:12 - INFO - Successful API request: https://www.virustotal.com/api/v3/ip_addresses/118.122.147.8
+2025-03-23 22:50:12 - INFO - Successful query for virustotal: country: CN
+2025-03-23 22:50:12 - INFO - Successful query for virustotal: as_owner: CHINANET SiChuan Telecom Internet Data Center
+2025-03-23 22:50:12 - INFO - Successful query for virustotal: reputation: {'malicious': 11, 'suspicious': 4, 'undetected': 26, 'harmless': 53, 'timeout': 0}
+2025-03-23 22:50:12 - INFO - Successful query for virustotal: malicious_vote: 3
+2025-03-23 22:50:12 - INFO - Successful query for virustotal: harmless_vote: 0
+2025-03-23 22:50:12 - INFO - Successful query for virustotal: tags: []
+2025-03-23 22:50:12 - INFO - Successful query for virustotal: permalink: https://www.virustotal.com/gui/ip-address/118.122.147.8
+2025-03-23 22:50:12 - INFO - Successful API request: https://otx.alienvault.com/api/v1/indicators/IPv4/118.122.147.8/general
+2025-03-23 22:50:12 - INFO - Successful query for alienvault: pulse_count: 6
+2025-03-23 22:50:12 - INFO - Successful query for alienvault: tags: ['Bruteforce', 'Brute-Force', 'SSH', 'Honeypot', 'cowrie', 'ssh', 'malicious', 'sftp', 'cowrie', 'ssh', 'honeypot', 'SSH', 'bruteforce', 'honeypot', 'brute force', 'ssh']
+2025-03-23 22:50:12 - INFO - Successful query for alienvault: name: ['SSH Brute-Force Honeypot Live', 'Honeypot Data - March 2025 - Cowrie', 'Fakelabs Honeynet Project', 'SSH honeypot logs for 2025-03-13', 'Automated Threat Intelligence - Brute-force hosts for 2025-03-05', '2025-02-25 Fail2Ban 7f878580-d43a-47bc-83d8-d3df7afdafdc']
+2025-03-23 22:50:12 - INFO - Successful query for alienvault: permalink: https://otx.alienvault.com/indicator/ip/118.122.147.8
+2025-03-23 22:50:12 - INFO - Final results for IOC 118.122.147.8: {'input': '118.122.147.8', 'type': 'IPv4', 'shodan: ip': '118.122.147.8', 'shodan: country': 'China', 'shodan: organization': 'CHINANET Sichuan province network', 'shodan: open_ports': [1701, 22], 'shodan: vulnerabilities': ['CVE-2023-51385', 'CVE-2016-20012', 'CVE-2018-15919', 'CVE-2017-15906', 'CVE-2021-36368', 'CVE-2023-51767', 'CVE-2018-20685', 'CVE-2018-15473', 'CVE-2020-14145', 'CVE-2020-15778', 'CVE-2023-48795', 'CVE-2023-38408', 'CVE-2007-2768', 'CVE-2008-3844', 'CVE-2019-6111', 'CVE-2019-6110', 'CVE-2021-41617', 'CVE-2019-6109'], 'shodan: hostnames': [], 'shodan: permalink': 'https://www.shodan.io/host/118.122.147.8', 'abuseipdb: abuse_confidence': 100, 'abuseipdb: total_reports': 863, 'abuseipdb: country': 'CN', 'abuseipdb: usage_type': 'Data Center/Web Hosting/Transit', 'abuseipdb: isp': 'CHINANET Sichuan province network', 'abuseipdb: domain': 'chinatelecom.cn', 'abuseipdb: hostnames': [], 'abuseipdb: last_report': '2025-03-23T10:43:08+00:00', 'abuseipdb: is_public': True, 'abuseipdb: isTor': False, 'abuseipdb: isProxy': 'Unknown', 'abuseipdb: permalink': 'https://www.abuseipdb.com/check/118.122.147.8', 'virustotal: country': 'CN', 'virustotal: as_owner': 'CHINANET SiChuan Telecom Internet Data Center', 'virustotal: reputation': {'malicious': 11, 'suspicious': 4, 'undetected': 26, 'harmless': 53, 'timeout': 0}, 'virustotal: malicious_vote': 3, 'virustotal: harmless_vote': 0, 'virustotal: tags': [], 'virustotal: permalink': 'https://www.virustotal.com/gui/ip-address/118.122.147.8', 'alienvault: pulse_count': 6, 'alienvault: tags': ['Bruteforce', 'Brute-Force', 'SSH', 'Honeypot', 'cowrie', 'ssh', 'malicious', 'sftp', 'cowrie', 'ssh', 'honeypot', 'SSH', 'bruteforce', 'honeypot', 'brute force', 'ssh'], 'alienvault: name': ['SSH Brute-Force Honeypot Live', 'Honeypot Data - March 2025 - Cowrie', 'Fakelabs Honeynet Project', 'SSH honeypot logs for 2025-03-13', 'Automated Threat Intelligence - Brute-force hosts for 2025-03-05', '2025-02-25 Fail2Ban 7f878580-d43a-47bc-83d8-d3df7afdafdc'], 'alienvault: permalink': 'https://otx.alienvault.com/indicator/ip/118.122.147.8'}
+2025-03-23 22:52:34 - INFO - Successful API request: https://api.shodan.io/shodan/host/118.122.147.8?key=Pc0gdLR5F1JXVSPLRDazU6u50YMjbUNW
+2025-03-23 22:52:34 - INFO - Successful query for shodan: ip: 118.122.147.8
+2025-03-23 22:52:34 - INFO - Successful query for shodan: country: China
+2025-03-23 22:52:34 - INFO - Successful query for shodan: organization: CHINANET Sichuan province network
+2025-03-23 22:52:34 - INFO - Successful query for shodan: open_ports: [1701, 22]
+2025-03-23 22:52:34 - INFO - Successful query for shodan: vulnerabilities: ['CVE-2023-51385', 'CVE-2016-20012', 'CVE-2018-15919', 'CVE-2017-15906', 'CVE-2021-36368', 'CVE-2023-51767', 'CVE-2018-20685', 'CVE-2018-15473', 'CVE-2020-14145', 'CVE-2020-15778', 'CVE-2023-48795', 'CVE-2023-38408', 'CVE-2007-2768', 'CVE-2008-3844', 'CVE-2019-6111', 'CVE-2019-6110', 'CVE-2021-41617', 'CVE-2019-6109']
+2025-03-23 22:52:34 - INFO - Successful query for shodan: hostnames: []
+2025-03-23 22:52:34 - INFO - Successful query for shodan: permalink: https://www.shodan.io/host/118.122.147.8
+2025-03-23 22:52:34 - INFO - Successful API request: https://otx.alienvault.com/api/v1/indicators/IPv4/118.122.147.8/general
+2025-03-23 22:52:34 - INFO - Successful query for alienvault: pulse_count: 6
+2025-03-23 22:52:34 - INFO - Successful query for alienvault: tags: ['Bruteforce', 'Brute-Force', 'SSH', 'Honeypot', 'cowrie', 'ssh', 'malicious', 'sftp', 'cowrie', 'ssh', 'honeypot', 'SSH', 'bruteforce', 'honeypot', 'brute force', 'ssh']
+2025-03-23 22:52:34 - INFO - Successful query for alienvault: name: ['SSH Brute-Force Honeypot Live', 'Honeypot Data - March 2025 - Cowrie', 'Fakelabs Honeynet Project', 'SSH honeypot logs for 2025-03-13', 'Automated Threat Intelligence - Brute-force hosts for 2025-03-05', '2025-02-25 Fail2Ban 7f878580-d43a-47bc-83d8-d3df7afdafdc']
+2025-03-23 22:52:34 - INFO - Successful query for alienvault: permalink: https://otx.alienvault.com/indicator/ip/118.122.147.8
+2025-03-23 22:52:34 - INFO - Successful API request: https://api.abuseipdb.com/api/v2/check
+2025-03-23 22:52:34 - INFO - Successful query for abuseipdb: abuse_confidence: 100
+2025-03-23 22:52:34 - INFO - Successful query for abuseipdb: total_reports: 863
+2025-03-23 22:52:34 - INFO - Successful query for abuseipdb: country: CN
+2025-03-23 22:52:34 - INFO - Successful query for abuseipdb: usage_type: Data Center/Web Hosting/Transit
+2025-03-23 22:52:34 - INFO - Successful query for abuseipdb: isp: CHINANET Sichuan province network
+2025-03-23 22:52:34 - INFO - Successful query for abuseipdb: domain: chinatelecom.cn
+2025-03-23 22:52:34 - INFO - Successful query for abuseipdb: hostnames: []
+2025-03-23 22:52:34 - INFO - Successful query for abuseipdb: last_report: 2025-03-23T10:43:08+00:00
+2025-03-23 22:52:34 - INFO - Successful query for abuseipdb: is_public: True
+2025-03-23 22:52:34 - INFO - Successful query for abuseipdb: isTor: False
+2025-03-23 22:52:34 - INFO - Successful query for abuseipdb: isProxy: Unknown
+2025-03-23 22:52:34 - INFO - Successful query for abuseipdb: permalink: https://www.abuseipdb.com/check/118.122.147.8
+2025-03-23 22:52:34 - INFO - Successful API request: https://www.virustotal.com/api/v3/ip_addresses/118.122.147.8
+2025-03-23 22:52:34 - INFO - Successful query for virustotal: country: CN
+2025-03-23 22:52:34 - INFO - Successful query for virustotal: as_owner: CHINANET SiChuan Telecom Internet Data Center
+2025-03-23 22:52:34 - INFO - Successful query for virustotal: reputation: {'malicious': 11, 'suspicious': 4, 'undetected': 26, 'harmless': 53, 'timeout': 0}
+2025-03-23 22:52:34 - INFO - Successful query for virustotal: malicious_vote: 3
+2025-03-23 22:52:34 - INFO - Successful query for virustotal: harmless_vote: 0
+2025-03-23 22:52:34 - INFO - Successful query for virustotal: tags: []
+2025-03-23 22:52:34 - INFO - Successful query for virustotal: permalink: https://www.virustotal.com/gui/ip-address/118.122.147.8
+2025-03-23 22:52:35 - INFO - Final results for IOC 118.122.147.8: {'input': '118.122.147.8', 'type': 'IPv4', 'shodan: ip': '118.122.147.8', 'shodan: country': 'China', 'shodan: organization': 'CHINANET Sichuan province network', 'shodan: open_ports': [1701, 22], 'shodan: vulnerabilities': ['CVE-2023-51385', 'CVE-2016-20012', 'CVE-2018-15919', 'CVE-2017-15906', 'CVE-2021-36368', 'CVE-2023-51767', 'CVE-2018-20685', 'CVE-2018-15473', 'CVE-2020-14145', 'CVE-2020-15778', 'CVE-2023-48795', 'CVE-2023-38408', 'CVE-2007-2768', 'CVE-2008-3844', 'CVE-2019-6111', 'CVE-2019-6110', 'CVE-2021-41617', 'CVE-2019-6109'], 'shodan: hostnames': [], 'shodan: permalink': 'https://www.shodan.io/host/118.122.147.8', 'alienvault: pulse_count': 6, 'alienvault: tags': ['Bruteforce', 'Brute-Force', 'SSH', 'Honeypot', 'cowrie', 'ssh', 'malicious', 'sftp', 'cowrie', 'ssh', 'honeypot', 'SSH', 'bruteforce', 'honeypot', 'brute force', 'ssh'], 'alienvault: name': ['SSH Brute-Force Honeypot Live', 'Honeypot Data - March 2025 - Cowrie', 'Fakelabs Honeynet Project', 'SSH honeypot logs for 2025-03-13', 'Automated Threat Intelligence - Brute-force hosts for 2025-03-05', '2025-02-25 Fail2Ban 7f878580-d43a-47bc-83d8-d3df7afdafdc'], 'alienvault: permalink': 'https://otx.alienvault.com/indicator/ip/118.122.147.8', 'abuseipdb: abuse_confidence': 100, 'abuseipdb: total_reports': 863, 'abuseipdb: country': 'CN', 'abuseipdb: usage_type': 'Data Center/Web Hosting/Transit', 'abuseipdb: isp': 'CHINANET Sichuan province network', 'abuseipdb: domain': 'chinatelecom.cn', 'abuseipdb: hostnames': [], 'abuseipdb: last_report': '2025-03-23T10:43:08+00:00', 'abuseipdb: is_public': True, 'abuseipdb: isTor': False, 'abuseipdb: isProxy': 'Unknown', 'abuseipdb: permalink': 'https://www.abuseipdb.com/check/118.122.147.8', 'virustotal: country': 'CN', 'virustotal: as_owner': 'CHINANET SiChuan Telecom Internet Data Center', 'virustotal: reputation': {'malicious': 11, 'suspicious': 4, 'undetected': 26, 'harmless': 53, 'timeout': 0}, 'virustotal: malicious_vote': 3, 'virustotal: harmless_vote': 0, 'virustotal: tags': [], 'virustotal: permalink': 'https://www.virustotal.com/gui/ip-address/118.122.147.8'}
+2025-03-23 22:57:48 - INFO - Successful API request: https://api.shodan.io/shodan/host/118.122.147.8?key=Pc0gdLR5F1JXVSPLRDazU6u50YMjbUNW
+2025-03-23 22:57:48 - INFO - Successful query for Shodan: ip: 118.122.147.8
+2025-03-23 22:57:48 - INFO - Successful query for Shodan: country: China
+2025-03-23 22:57:48 - INFO - Successful query for Shodan: organization: CHINANET Sichuan province network
+2025-03-23 22:57:48 - INFO - Successful query for Shodan: open_ports: [1701, 22]
+2025-03-23 22:57:48 - INFO - Successful query for Shodan: vulnerabilities: ['CVE-2023-51385', 'CVE-2016-20012', 'CVE-2018-15919', 'CVE-2017-15906', 'CVE-2021-36368', 'CVE-2023-51767', 'CVE-2018-20685', 'CVE-2018-15473', 'CVE-2020-14145', 'CVE-2020-15778', 'CVE-2023-48795', 'CVE-2023-38408', 'CVE-2007-2768', 'CVE-2008-3844', 'CVE-2019-6111', 'CVE-2019-6110', 'CVE-2021-41617', 'CVE-2019-6109']
+2025-03-23 22:57:48 - INFO - Successful query for Shodan: hostnames: []
+2025-03-23 22:57:48 - INFO - Successful query for Shodan: permalink: https://www.shodan.io/host/118.122.147.8
+2025-03-23 22:57:48 - INFO - Successful API request: https://api.abuseipdb.com/api/v2/check
+2025-03-23 22:57:48 - INFO - Successful query for AbuseIP DB: abuse_confidence: 100
+2025-03-23 22:57:48 - INFO - Successful query for AbuseIP DB: total_reports: 863
+2025-03-23 22:57:48 - INFO - Successful query for AbuseIP DB: country: CN
+2025-03-23 22:57:48 - INFO - Successful query for AbuseIP DB: usage_type: Data Center/Web Hosting/Transit
+2025-03-23 22:57:48 - INFO - Successful query for AbuseIP DB: isp: CHINANET Sichuan province network
+2025-03-23 22:57:48 - INFO - Successful query for AbuseIP DB: domain: chinatelecom.cn
+2025-03-23 22:57:48 - INFO - Successful query for AbuseIP DB: hostnames: []
+2025-03-23 22:57:48 - INFO - Successful query for AbuseIP DB: last_report: 2025-03-23T10:43:08+00:00
+2025-03-23 22:57:48 - INFO - Successful query for AbuseIP DB: is_public: True
+2025-03-23 22:57:48 - INFO - Successful query for AbuseIP DB: isTor: False
+2025-03-23 22:57:48 - INFO - Successful query for AbuseIP DB: isProxy: Unknown
+2025-03-23 22:57:48 - INFO - Successful query for AbuseIP DB: permalink: https://www.abuseipdb.com/check/118.122.147.8
+2025-03-23 22:57:49 - INFO - Successful API request: https://otx.alienvault.com/api/v1/indicators/IPv4/118.122.147.8/general
+2025-03-23 22:57:49 - INFO - Successful query for Alienvault OTX: pulse_count: 6
+2025-03-23 22:57:49 - INFO - Successful query for Alienvault OTX: tags: ['Bruteforce', 'Brute-Force', 'SSH', 'Honeypot', 'cowrie', 'ssh', 'malicious', 'sftp', 'cowrie', 'ssh', 'honeypot', 'SSH', 'bruteforce', 'honeypot', 'brute force', 'ssh']
+2025-03-23 22:57:49 - INFO - Successful query for Alienvault OTX: name: ['SSH Brute-Force Honeypot Live', 'Honeypot Data - March 2025 - Cowrie', 'Fakelabs Honeynet Project', 'SSH honeypot logs for 2025-03-13', 'Automated Threat Intelligence - Brute-force hosts for 2025-03-05', '2025-02-25 Fail2Ban 7f878580-d43a-47bc-83d8-d3df7afdafdc']
+2025-03-23 22:57:49 - INFO - Successful query for Alienvault OTX: permalink: https://otx.alienvault.com/indicator/ip/118.122.147.8
+2025-03-23 22:57:49 - INFO - Successful API request: https://www.virustotal.com/api/v3/ip_addresses/118.122.147.8
+2025-03-23 22:57:49 - INFO - Successful query for VirusTotal: country: CN
+2025-03-23 22:57:49 - INFO - Successful query for VirusTotal: as_owner: CHINANET SiChuan Telecom Internet Data Center
+2025-03-23 22:57:49 - INFO - Successful query for VirusTotal: reputation: {'malicious': 11, 'suspicious': 4, 'undetected': 26, 'harmless': 53, 'timeout': 0}
+2025-03-23 22:57:49 - INFO - Successful query for VirusTotal: malicious_vote: 3
+2025-03-23 22:57:49 - INFO - Successful query for VirusTotal: harmless_vote: 0
+2025-03-23 22:57:49 - INFO - Successful query for VirusTotal: tags: []
+2025-03-23 22:57:49 - INFO - Successful query for VirusTotal: permalink: https://www.virustotal.com/gui/ip-address/118.122.147.8
+2025-03-23 22:57:49 - INFO - Final results for IOC 118.122.147.8: {'input': '118.122.147.8', 'type': 'IPv4', 'Shodan: ip': '118.122.147.8', 'Shodan: country': 'China', 'Shodan: organization': 'CHINANET Sichuan province network', 'Shodan: open_ports': [1701, 22], 'Shodan: vulnerabilities': ['CVE-2023-51385', 'CVE-2016-20012', 'CVE-2018-15919', 'CVE-2017-15906', 'CVE-2021-36368', 'CVE-2023-51767', 'CVE-2018-20685', 'CVE-2018-15473', 'CVE-2020-14145', 'CVE-2020-15778', 'CVE-2023-48795', 'CVE-2023-38408', 'CVE-2007-2768', 'CVE-2008-3844', 'CVE-2019-6111', 'CVE-2019-6110', 'CVE-2021-41617', 'CVE-2019-6109'], 'Shodan: hostnames': [], 'Shodan: permalink': 'https://www.shodan.io/host/118.122.147.8', 'AbuseIP DB: abuse_confidence': 100, 'AbuseIP DB: total_reports': 863, 'AbuseIP DB: country': 'CN', 'AbuseIP DB: usage_type': 'Data Center/Web Hosting/Transit', 'AbuseIP DB: isp': 'CHINANET Sichuan province network', 'AbuseIP DB: domain': 'chinatelecom.cn', 'AbuseIP DB: hostnames': [], 'AbuseIP DB: last_report': '2025-03-23T10:43:08+00:00', 'AbuseIP DB: is_public': True, 'AbuseIP DB: isTor': False, 'AbuseIP DB: isProxy': 'Unknown', 'AbuseIP DB: permalink': 'https://www.abuseipdb.com/check/118.122.147.8', 'Alienvault OTX: pulse_count': 6, 'Alienvault OTX: tags': ['Bruteforce', 'Brute-Force', 'SSH', 'Honeypot', 'cowrie', 'ssh', 'malicious', 'sftp', 'cowrie', 'ssh', 'honeypot', 'SSH', 'bruteforce', 'honeypot', 'brute force', 'ssh'], 'Alienvault OTX: name': ['SSH Brute-Force Honeypot Live', 'Honeypot Data - March 2025 - Cowrie', 'Fakelabs Honeynet Project', 'SSH honeypot logs for 2025-03-13', 'Automated Threat Intelligence - Brute-force hosts for 2025-03-05', '2025-02-25 Fail2Ban 7f878580-d43a-47bc-83d8-d3df7afdafdc'], 'Alienvault OTX: permalink': 'https://otx.alienvault.com/indicator/ip/118.122.147.8', 'VirusTotal: country': 'CN', 'VirusTotal: as_owner': 'CHINANET SiChuan Telecom Internet Data Center', 'VirusTotal: reputation': {'malicious': 11, 'suspicious': 4, 'undetected': 26, 'harmless': 53, 'timeout': 0}, 'VirusTotal: malicious_vote': 3, 'VirusTotal: harmless_vote': 0, 'VirusTotal: tags': [], 'VirusTotal: permalink': 'https://www.virustotal.com/gui/ip-address/118.122.147.8'}

@@ -116,10 +116,10 @@ def query_alienvault_ip(ioc, ioc_type):
     tags = [tag for pulse in data.get("pulse_info", {}).get("pulses", []) for tag in pulse.get("tags", [])]
     names = [pulse.get("name", "Unknown") for pulse in data.get("pulse_info", {}).get("pulses", [])]
     return {
-        "alienvault: pulse_count": data.get("pulse_info", {}).get("count", 0),
-        "alienvault: tags": tags,
-        "alienvault: name": names,
-        "alienvault: permalink": f"https://otx.alienvault.com/indicator/ip/{ioc}"
+        "Alienvault OTX: pulse_count": data.get("pulse_info", {}).get("count", 0),
+        "Alienvault OTX: tags": tags,
+        "Alienvault OTX: name": names,
+        "Alienvault OTX: permalink": f"https://otx.alienvault.com/indicator/ip/{ioc}"
     }
 
 # Function to query AlienVault OTX for a domain
@@ -135,10 +135,10 @@ def query_alienvault_domain(ioc):
     tags = [tag for pulse in data.get("pulse_info", {}).get("pulses", []) for tag in pulse.get("tags", [])]
     names = [pulse.get("name", "Unknown") for pulse in data.get("pulse_info", {}).get("pulses", [])]
     return {
-        "alienvault: pulse_count": data.get("pulse_info", {}).get("count", 0),
-        "alienvault: tags": tags,
-        "alienvault: name": names,
-        "alienvault: permalink": f"https://otx.alienvault.com/indicator/domain/{ioc}"
+        "Alienvault OTX: pulse_count": data.get("pulse_info", {}).get("count", 0),
+        "Alienvault OTX: tags": tags,
+        "Alienvault OTX: name": names,
+        "Alienvault OTX: permalink": f"https://otx.alienvault.com/indicator/domain/{ioc}"
     }
 
 # Function to query AlienVault OTX for a hash
@@ -154,10 +154,10 @@ def query_alienvault_hash(ioc):
     tags = [tag for pulse in data.get("pulse_info", {}).get("pulses", []) for tag in pulse.get("tags", [])]
     names = [pulse.get("name", "Unknown") for pulse in data.get("pulse_info", {}).get("pulses", [])]
     return {
-        "alienvault: pulse_count": data.get("pulse_info", {}).get("count", 0),
-        "alienvault: tags": tags,
-        "alienvault: name": names,
-        "alienvault: permalink": f"https://otx.alienvault.com/indicator/file/{ioc}"
+        "Alienvault OTX: pulse_count": data.get("pulse_info", {}).get("count", 0),
+        "Alienvault OTX: tags": tags,
+        "Alienvault OTX: name": names,
+        "Alienvault OTX: permalink": f"https://otx.alienvault.com/indicator/file/{ioc}"
     }
 
 # Function to query VirusTotal for a URL
@@ -183,10 +183,10 @@ def query_virustotal_url(url):
     report_data = report_response.get("data", {}).get("attributes", {})
     permalink = f"https://www.virustotal.com/gui/url/{encoded_url}"  # Construct the permalink
     return {
-        "virustotal: reputation": report_data.get("stats", {}),
-        "virustotal: malicious_vote": report_data.get("votes", {}).get("malicious", 0),
-        "virustotal: harmless_vote": report_data.get("votes", {}).get("harmless", 0),
-        "virustotal: permalink": permalink
+        "VirusTotal: reputation": report_data.get("stats", {}),
+        "VirusTotal: malicious_vote": report_data.get("votes", {}).get("malicious", 0),
+        "VirusTotal: harmless_vote": report_data.get("votes", {}).get("harmless", 0),
+        "VirusTotal: permalink": permalink
     }
 
 # Function to query VirusTotal for an IP address
@@ -199,13 +199,13 @@ def query_virustotal_ip(ip):
     data = response.get("data", {}).get("attributes", {})
     permalink = f"https://www.virustotal.com/gui/ip-address/{ip}"  # Construct the permalink
     return {
-        "virustotal: country": data.get("country", "Unknown"),
-        "virustotal: as_owner": data.get("as_owner", "Unknown"),
-        "virustotal: reputation": data.get("last_analysis_stats", {}),
-        "virustotal: malicious_vote": data.get("total_votes", {}).get("malicious", 0),
-        "virustotal: harmless_vote": data.get("total_votes", {}).get("harmless", 0),
-        "virustotal: tags": data.get("tags", []),
-        "virustotal: permalink": permalink
+        "VirusTotal: country": data.get("country", "Unknown"),
+        "VirusTotal: as_owner": data.get("as_owner", "Unknown"),
+        "VirusTotal: reputation": data.get("last_analysis_stats", {}),
+        "VirusTotal: malicious_vote": data.get("total_votes", {}).get("malicious", 0),
+        "VirusTotal: harmless_vote": data.get("total_votes", {}).get("harmless", 0),
+        "VirusTotal: tags": data.get("tags", []),
+        "VirusTotal: permalink": permalink
     }
 
 # Function to query VirusTotal for a file hash
@@ -218,11 +218,11 @@ def query_virustotal_hash(file_hash):
     data = response.get("data", {}).get("attributes", {})
     permalink = f"https://www.virustotal.com/gui/file/{file_hash}"  # Construct the permalink
     return {
-        "virustotal: reputation": data.get("last_analysis_stats", {}),
-        "virustotal: malicious_vote": data.get("total_votes", {}).get("malicious", 0),
-        "virustotal: harmless_vote": data.get("total_votes", {}).get("harmless", 0),
-        "virustotal: tags": data.get("tags", []),
-        "virustotal: permalink": permalink
+        "VirusTotal: reputation": data.get("last_analysis_stats", {}),
+        "VirusTotal: malicious_vote": data.get("total_votes", {}).get("malicious", 0),
+        "VirusTotal: harmless_vote": data.get("total_votes", {}).get("harmless", 0),
+        "VirusTotal: tags": data.get("tags", []),
+        "VirusTotal: permalink": permalink
     }
 
 # Function to query VirusTotal for a domain
@@ -235,13 +235,13 @@ def query_virustotal_domain(domain):
     data = response.get("data", {}).get("attributes", {})
     permalink = f"https://www.virustotal.com/gui/domain/{domain}"  # Construct the permalink
     return {
-        "virustotal: categories": data.get("categories", "Unknown"),
-        "virustotal: registrar": data.get("registrar", "Unknown"),
-        "virustotal: reputation": data.get("last_analysis_stats", {}),
-        "virustotal: malicious_vote": data.get("total_votes", {}).get("malicious", 0),
-        "virustotal: harmless_vote": data.get("total_votes", {}).get("harmless", 0),
-        "virustotal: tags": data.get("tags", []),
-        "virustotal: permalink": permalink
+        "VirusTotal: categories": data.get("categories", "Unknown"),
+        "VirusTotal: registrar": data.get("registrar", "Unknown"),
+        "VirusTotal: reputation": data.get("last_analysis_stats", {}),
+        "VirusTotal: malicious_vote": data.get("total_votes", {}).get("malicious", 0),
+        "VirusTotal: harmless_vote": data.get("total_votes", {}).get("harmless", 0),
+        "VirusTotal: tags": data.get("tags", []),
+        "VirusTotal: permalink": permalink
     }
 
 # Function to submit a URL to URLScan.io and retrieve the report
@@ -267,14 +267,14 @@ def get_urlscan_report(scan_id):
 
     data = response
     return {
-        "urlscan: score": data.get("verdicts", {}).get("urlscan", "Unknown"),
-        "urlscan: ip stats": data.get("stats", {}).get("ipStats", {}),
-        "urlscan: domain": data.get("stats", {}).get("domainStats", {}),
-        "urlscan: categories": data.get("verdicts", {}).get("categories", []),
-        "urlscan: tags": data.get("verdicts", {}).get("overall", {}).get("tags", []),
-        "urlscan: malicious": data.get("verdicts", {}).get("overall", {}).get("malicious", False),
-        "urlscan: screenshot url": data.get("task", {}).get("screenshotURL", "N/A"),
-        "urlscan: permalink": f"https://urlscan.io/result/{scan_id}/"
+        "URLscan.io: score": data.get("verdicts", {}).get("urlscan", "Unknown"),
+        "URLscan.io: ip stats": data.get("stats", {}).get("ipStats", {}),
+        "URLscan.io: domain": data.get("stats", {}).get("domainStats", {}),
+        "URLscan.io: categories": data.get("verdicts", {}).get("categories", []),
+        "URLscan.io: tags": data.get("verdicts", {}).get("overall", {}).get("tags", []),
+        "URLscan.io: malicious": data.get("verdicts", {}).get("overall", {}).get("malicious", False),
+        "URLscan.io: screenshot url": data.get("task", {}).get("screenshotURL", "N/A"),
+        "URLscan.io: permalink": f"https://urlscan.io/result/{scan_id}/"
     }
 
 # Function to submit a URL to URLScan.io and retrieve the report
@@ -319,18 +319,18 @@ def query_abuseipdb(ip):
 
     data = response.get("data", {})
     return {
-        "abuseipdb: abuse_confidence": data.get("abuseConfidenceScore", 0),
-        "abuseipdb: total_reports": data.get("totalReports", 0),
-        "abuseipdb: country": data.get("countryCode", "Unknown"),
-        "abuseipdb: usage_type": data.get("usageType", "Unknown"),
-        "abuseipdb: isp": data.get("isp", "Unknown"),
-        "abuseipdb: domain": data.get("domain", "Unknown"),
-        "abuseipdb: hostnames": data.get("hostnames", []),
-        "abuseipdb: last_report": data.get("lastReportedAt", "Unknown"),
-        "abuseipdb: is_public": data.get("isPublic", "Unknown"),
-        "abuseipdb: isTor": data.get("isTor", "Unknown"),
-        "abuseipdb: isProxy": data.get("isProxy", "Unknown"),
-        "abuseipdb: permalink": f"https://www.abuseipdb.com/check/{ip}"  # Add permalink
+        "AbuseIP DB: abuse_confidence": data.get("abuseConfidenceScore", 0),
+        "AbuseIP DB: total_reports": data.get("totalReports", 0),
+        "AbuseIP DB: country": data.get("countryCode", "Unknown"),
+        "AbuseIP DB: usage_type": data.get("usageType", "Unknown"),
+        "AbuseIP DB: isp": data.get("isp", "Unknown"),
+        "AbuseIP DB: domain": data.get("domain", "Unknown"),
+        "AbuseIP DB: hostnames": data.get("hostnames", []),
+        "AbuseIP DB: last_report": data.get("lastReportedAt", "Unknown"),
+        "AbuseIP DB: is_public": data.get("isPublic", "Unknown"),
+        "AbuseIP DB: isTor": data.get("isTor", "Unknown"),
+        "AbuseIP DB: isProxy": data.get("isProxy", "Unknown"),
+        "AbuseIP DB: permalink": f"https://www.abuseipdb.com/check/{ip}"  # Add permalink
     }
 
 # Function to query Hybrid Analysis for a file hash
@@ -351,11 +351,11 @@ def query_hybrid_analysis_hash(file_hash):
 
     best_result = max(filtered_data, key=lambda x: x.get("threat_score", 0))
     return {
-        "hybrid analysis: threat score": best_result.get("threat_score", "Unknown"),
-        "hybrid analysis: av detect": best_result.get("av_detect", "Unknown"),
-        "hybrid analysis: verdict": best_result.get("verdict", "Unknown"),
-        "hybrid analysis: submissions": best_result.get("submissions", "Unknown"),
-        "hybrid analysis: url": best_result.get("report_url", "N/A")
+        "Hybrid analysis: threat score": best_result.get("threat_score", "Unknown"),
+        "Hybrid analysis: av detect": best_result.get("av_detect", "Unknown"),
+        "Hybrid analysis: verdict": best_result.get("verdict", "Unknown"),
+        "Hybrid analysis: submissions": best_result.get("submissions", "Unknown"),
+        "Hybrid analysis: url": best_result.get("report_url", "N/A")
     }
 
 # Function to query Shodan for IP intelligence
@@ -367,13 +367,13 @@ def query_shodan(ip):
 
     data = response
     return {
-        "shodan: ip": ip,
-        "shodan: country": data.get("country_name", "Unknown"),
-        "shodan: organization": data.get("org", "Unknown"),
-        "shodan: open_ports": data.get("ports", []),
-        "shodan: vulnerabilities": data.get("vulns", []),
-        "shodan: hostnames": data.get("hostnames", []),
-        "shodan: permalink": f"https://www.shodan.io/host/{ip}"
+        "Shodan: ip": ip,
+        "Shodan: country": data.get("country_name", "Unknown"),
+        "Shodan: organization": data.get("org", "Unknown"),
+        "Shodan: open_ports": data.get("ports", []),
+        "Shodan: vulnerabilities": data.get("vulns", []),
+        "Shodan: hostnames": data.get("hostnames", []),
+        "Shodan: permalink": f"https://www.shodan.io/host/{ip}"
     }
 
 def display_banner():
@@ -434,7 +434,7 @@ def format_results_as_table(results):
         formatted_value = format_value(value)
         split_value = split_into_lines(formatted_value)
         table.append([tool, field, split_value])
-    return tabulate(table, headers=["Source", "Attribute", "Details"], tablefmt="tsv")
+    return tabulate(table, headers=["Source", "Attribute", "Details"], tablefmt="plain")
 
 # Main function that processes IOCs
 def main():
