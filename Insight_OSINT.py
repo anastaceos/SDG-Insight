@@ -1,3 +1,12 @@
+'''
+additional packages needed for sdg insight
+
+pip install validators
+pip install python-dotenv
+pip install tabulate
+ping install pyperclip
+'''
+
 import requests
 import time
 import json
@@ -13,6 +22,7 @@ from dotenv import load_dotenv
 import concurrent.futures
 import logging
 from tabulate import tabulate
+import pyperclip\
 
 # Configure logging to write both INFO and ERROR messages to the same file
 logging.basicConfig(
@@ -424,7 +434,7 @@ def format_results_as_table(results):
         formatted_value = format_value(value)
         split_value = split_into_lines(formatted_value)
         table.append([tool, field, split_value])
-    return tabulate(table, headers=["Source", "Attribute", "Details"], tablefmt="grid")
+    return tabulate(table, headers=["Source", "Attribute", "Details"], tablefmt="tsv")
 
 # Main function that processes IOCs
 def main():
@@ -480,7 +490,13 @@ def main():
                     else:
                         logging.info(f"Successful query for {key}: {value}")
             
-            print(format_results_as_table(result))
+            formatted_results = format_results_as_table(result)
+            print(formatted_results)
+            
+            # Copy results to clipboard
+            pyperclip.copy(formatted_results)
+            print("\nResults have been copied to the clipboard.")
+            
             logging.info(f"Final results for IOC {ioc}: {result}")
 
 if __name__ == "__main__":
