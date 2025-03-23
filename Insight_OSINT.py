@@ -319,18 +319,18 @@ def query_abuseipdb(ip):
 
     data = response.get("data", {})
     return {
-        "AbuseIP DB: abuse_confidence": data.get("abuseConfidenceScore", 0),
-        "AbuseIP DB: total_reports": data.get("totalReports", 0),
-        "AbuseIP DB: country": data.get("countryCode", "Unknown"),
-        "AbuseIP DB: usage_type": data.get("usageType", "Unknown"),
-        "AbuseIP DB: isp": data.get("isp", "Unknown"),
-        "AbuseIP DB: domain": data.get("domain", "Unknown"),
-        "AbuseIP DB: hostnames": data.get("hostnames", []),
-        "AbuseIP DB: last_report": data.get("lastReportedAt", "Unknown"),
-        "AbuseIP DB: is_public": data.get("isPublic", "Unknown"),
-        "AbuseIP DB: isTor": data.get("isTor", "Unknown"),
-        "AbuseIP DB: isProxy": data.get("isProxy", "Unknown"),
-        "AbuseIP DB: permalink": f"https://www.abuseipdb.com/check/{ip}"  # Add permalink
+        "AbuseIPDB: abuse_confidence": data.get("abuseConfidenceScore", 0),
+        "AbuseIPDB: total_reports": data.get("totalReports", 0),
+        "AbuseIPDB: country": data.get("countryCode", "Unknown"),
+        "AbuseIPDB: usage_type": data.get("usageType", "Unknown"),
+        "AbuseIPDB: isp": data.get("isp", "Unknown"),
+        "AbuseIPDB: domain": data.get("domain", "Unknown"),
+        "AbuseIPDB: hostnames": data.get("hostnames", []),
+        "AbuseIPDB: last_report": data.get("lastReportedAt", "Unknown"),
+        "AbuseIPDB: is_public": data.get("isPublic", "Unknown"),
+        "AbuseIPDB: isTor": data.get("isTor", "Unknown"),
+        "AbuseIPDB: isProxy": data.get("isProxy", "Unknown"),
+        "AbuseIPDB: permalink": f"https://www.abuseipdb.com/check/{ip}"  # Add permalink
     }
 
 # Function to query Hybrid Analysis for a file hash
@@ -398,11 +398,6 @@ def display_banner():
 
 # Function to format results as a table using the tabulate library
 def format_results_as_table(results):
-    def split_into_lines(value, length=200):
-        if isinstance(value, str) and len(value) > length:
-            return '\n'.join([value[i:i+length] for i in range(0, len(value), length)])
-        return value
-
     def format_value(value, indent=0):
         if isinstance(value, dict):
             formatted_dict = []
@@ -410,13 +405,13 @@ def format_results_as_table(results):
                 formatted_dict.append(f"{' ' * indent}{k}: {format_value(v, indent + 2)}")
             return '\n'.join(formatted_dict)
         elif isinstance(value, list):
-            # Filter out empty or None values from the list
+            # Format each item in the list without splitting into lines
             filtered_values = [item for item in value if item]
             if not filtered_values:
                 return "N/A"  # Return "N/A" if the list is empty
             unique_values = list(dict.fromkeys(map(str, filtered_values)))  # Remove duplicates while preserving order
             formatted_list = [f"{' ' * indent}- {item}" for item in unique_values]
-            return '\n'.join(formatted_list)
+            return '\n'.join(formatted_list)  # Join the list items with newlines
         elif value in [None, ""]:
             return "N/A"  # Return "N/A" for empty or None values
         return str(value)
@@ -431,9 +426,11 @@ def format_results_as_table(results):
             tool, field = key.split(": ", 1)
         else:
             tool, field = "Insight-OSINT", key
+
+        # Format the value without splitting lists
         formatted_value = format_value(value)
-        split_value = split_into_lines(formatted_value)
-        table.append([tool, field, split_value])
+        table.append([tool, field, formatted_value])
+
     return tabulate(table, headers=["Source", "Attribute", "Details"], tablefmt="plain")
 
 # Main function that processes IOCs
