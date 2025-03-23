@@ -4,7 +4,7 @@ additional packages needed for sdg insight
 pip install validators
 pip install python-dotenv
 pip install tabulate
-ping install pyperclip
+pip install pyperclip
 '''
 
 import requests
@@ -22,7 +22,7 @@ from dotenv import load_dotenv
 import concurrent.futures
 import logging
 from tabulate import tabulate
-import pyperclip\
+import pyperclip
 
 # Configure logging to write both INFO and ERROR messages to the same file
 logging.basicConfig(
@@ -444,7 +444,7 @@ def main():
         # Determine the type of IOC
         ioc = ioc.strip()
         ioc_type = determine_ioc_type(ioc)
-        result = {"input": ioc, "type": ioc_type}
+        result = {"Input": ioc, "Input Type": ioc_type}
         
         with concurrent.futures.ThreadPoolExecutor() as executor:
             futures = []
