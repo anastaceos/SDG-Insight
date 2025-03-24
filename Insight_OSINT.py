@@ -45,6 +45,11 @@ HYBRID_ANALYSIS_API_KEY = "6rnakmkj6ed49416v459v1fl75bbd7e3abafiwmf99ea95f84ow80
 URLSCAN_API_KEY = "01958a4b-1aec-7001-9c07-e01053a8158b"
 SHODAN_API_KEY = "Pc0gdLR5F1JXVSPLRDazU6u50YMjbUNW"
 ALIENVAULT_API_KEY = "b1a72dbeaa5f0991bc9d57f4ed64234341cb015a15c205a02a0d440bf2079418"
+GREYNOISE_API_KEY= "0QzTcyXH5V2DycaLC5LVfYH4At1EXGDVIgLF6mOFZWXJMamiymDVs7NcAzCzguV7"
+IPINFO_API_KEY= "25e8915b17234a"
+THREATFOX_API_KEY= "bd86ca0e69e3deb541b7283bdc2eede881fad48a4a7a205b"
+HIBP_API_KEY= "9cceaed6583144ca94486ac0e677797f"
+
 
 # Headers for APIs
 VT_HEADERS = {
@@ -68,6 +73,41 @@ URLSCAN_HEADERS = {
 ALIENVAULT_HEADERS = {
     "X-OTX-API-KEY": ALIENVAULT_API_KEY
 }
+GREYNOISE_HEADERS = {
+    "Accept": "application/json",
+    "key": GREYNOISE_API_KEY
+}
+IPINFO_HEADERS = {
+    "Authorization": f"Bearer {IPINFO_API_KEY}"
+}
+THREATFOX_HEADERS = {
+    "Content-Type": "application/x-www-form-urlencoded",
+    "Auth-Key": THREATFOX_API_KEY
+}
+HIBP_HEADERS = {
+    "hibp-api-key": HIBP_API_KEY,
+    "User-Agent": "SOC-Investigator-Script/1.0"
+}
+
+def display_banner():
+    banner = r"""
+  _____           _       _     _           ____   _____ _____ _   _ _______ 
+ |_   _|         (_)     | |   | |         / __ \ / ____|_   _| \ | |__   __|
+   | |  _ __  ___ _  __ _| |__ | |_ ______| |  | | (___   | | |  \| |  | |   
+   | | | '_ \/ __| |/ _` | '_ \| __|______| |  | |\___ \  | | | . ` |  | |   
+  _| |_| | | \__ \ | (_| | | | | |_       | |__| |____) |_| |_| |\  |  | |   
+ |_____|_| |_|___/_|\__, |_| |_|\__|       \____/|_____/|_____|_| \_|  |_|   
+                     __/ |                                                   
+                    |___/  
+                                                                                     
+                 SOC Analyst All-in-One Investigation Tool
+         ------------------------------------------------------------
+         - OSINT | Threat Intelligence | Incident Response
+         - Integrated APIs: VirusTotal, URLScan, AbuseIP DB and more!
+         - Developed for fast and efficient IOC analysis
+         ------------------------------------------------------------
+     """
+    print(banner)
     
 def determine_ioc_type(ioc):
     if validators.ipv4(ioc):
@@ -376,25 +416,110 @@ def query_shodan(ip):
         "Shodan: permalink": f"https://www.shodan.io/host/{ip}"
     }
 
-def display_banner():
-    banner = r"""
-  _____           _       _     _           ____   _____ _____ _   _ _______ 
- |_   _|         (_)     | |   | |         / __ \ / ____|_   _| \ | |__   __|
-   | |  _ __  ___ _  __ _| |__ | |_ ______| |  | | (___   | | |  \| |  | |   
-   | | | '_ \/ __| |/ _` | '_ \| __|______| |  | |\___ \  | | | . ` |  | |   
-  _| |_| | | \__ \ | (_| | | | | |_       | |__| |____) |_| |_| |\  |  | |   
- |_____|_| |_|___/_|\__, |_| |_|\__|       \____/|_____/|_____|_| \_|  |_|   
-                     __/ |                                                   
-                    |___/  
-                                                                                     
-                 SOC Analyst All-in-One Investigation Tool
-         ------------------------------------------------------------
-         - OSINT | Threat Intelligence | Incident Response
-         - Integrated APIs: VirusTotal, URLScan, AbuseIP DB and more!
-         - Developed for fast and efficient IOC analysis
-         ------------------------------------------------------------
-     """
-    print(banner)
+# Function to query Greynoise for IP intelligence
+def query_greynoise(ip):
+    url = f"https://api.greynoise.io/v3/community/{ip}"
+    response = query_api(url, GREYNOISE_HEADERS)
+    
+    if "error" in response:
+        return {"greynoise: error": response["error"]}
+
+    return {
+        "Greynoise: classification": response.get("classification", "unknown"),
+        "Greynoise: name": response.get("name", "unknown"),
+        "Greynoise: link": f"https://viz.greynoise.io/ip/{ip}",
+        "Greynoise: last_seen": response.get("last_seen", "unknown"),
+        "Greynoise: actor": response.get("actor", "unknown"),
+        "Greynoise: tags": response.get("tags", []),
+        "Greynoise: riot": response.get("riot", {}),
+        "Greynoise: message": response.get("message", {}),
+        "Greynoise: metadata": response.get("metadata", {})
+    }
+
+# Function to query IPinfo for IP intelligence
+def query_ipinfo(ip):
+    url = f"https://ipinfo.io/{ip}/json"
+    response = query_api(url, IPINFO_HEADERS)
+
+    if "error" in response:
+        return {"ipinfo: error": response["error"]}
+
+    return {
+        "IPinfo: ip": response.get("ip", "unknown"),
+        "IPinfo: city": response.get("city", "unknown"),
+        "IPinfo: region": response.get("region", "unknown"),
+        "IPinfo: country": response.get("country", "unknown"),
+        "IPinfo: location": response.get("loc", "unknown"),
+        "IPinfo: org": response.get("org", "unknown"),
+        "IPinfo: asn": response.get("asn", {}).get("asn", "unknown") if isinstance(response.get("asn"), dict) else "unknown",
+        "IPinfo: privacy": response.get("privacy", {}),
+        "IPinfo: abuse_contact": response.get("abuse", {}).get("address", "unknown"),
+        "IPinfo: link": f"https://ipinfo.io/{ip}"
+    }
+
+# Function to query Have I Been Pwned for email breaches
+def query_hibp_email(email):
+    url = f"https://haveibeenpwned.com/api/v3/breachedaccount/{email}?truncateResponse=false"
+
+    try:
+        response = requests.get(url, headers=HIBP_HEADERS)
+        if response.status_code == 404:
+            return {"hibp: result": "No breaches found"}
+        response.raise_for_status()
+        breaches = response.json()
+
+        breach_list = []
+        for breach in breaches:
+            breach_list.append({
+                "Name": breach.get("Name", "Unknown"),
+                "BreachDate": breach.get("BreachDate", "Unknown"),
+                "Description": breach.get("Description", "No description"),
+                "DataClasses": breach.get("DataClasses", [])
+            })
+
+        return {"hibp: breaches": breach_list}
+
+    except requests.RequestException as e:
+        return {"hibp: error": str(e)}
+
+
+# Function to query ThreatFox for threat intelligence
+def query_threatfox(ioc):
+    url = "https://threatfox-api.abuse.ch/api/v1/"
+    headers = {
+        "Content-Type": "application/json",
+        "Auth-Key": THREATFOX_API_KEY
+    }
+
+    payload = {
+        "query": "search_ioc",
+        "search_term": ioc,
+        "exact_match": True
+    }
+
+    try:
+        response = requests.post(url, headers=headers, json=payload)
+        response.raise_for_status()
+        data = response.json()
+
+        if data.get("query_status") != "ok" or not data.get("data"):
+            return {"threatfox: result": "No IOC match found"}
+
+        top = data["data"][0]
+        return {
+            "Threatfox: ioc_type": top.get("ioc_type_desc", "Unknown"),
+            "Threatfox: threat_type": top.get("threat_type_desc", "Unknown"),
+            "Threatfox: malware": top.get("malware_printable", top.get("malware", "Unknown")),
+            "Threatfox: confidence": top.get("confidence_level", "Unknown"),
+            "Threatfox: first_seen": top.get("first_seen", "Unknown"),
+            "Threatfox: last_seen": top.get("last_seen", "Unknown"),
+            "Threatfox: reference": top.get("reference", "N/A"),
+            "Threatfox: tags": top.get("tags", []),
+            "Threatfox: malpedia": top.get("malware_malpedia", None)
+        }
+
+    except requests.RequestException as e:
+        return {"threatfox: error": str(e)}
 
 # Function to format results as a table using the tabulate library
 def format_results_as_table(results):
@@ -455,22 +580,29 @@ def main():
                 futures.append(executor.submit(query_abuseipdb, ioc))
                 futures.append(executor.submit(query_shodan, ioc))
                 futures.append(executor.submit(query_alienvault_ip, ioc, ioc_type))
+                futures.append(executor.submit(query_greynoise, ioc))
+                futures.append(executor.submit(query_ipinfo, ioc))
+                futures.append(executor.submit(query_threatfox, ioc))
             elif ioc_type == "Domain":
                 print(f"\nGathering Intel for Domain: {ioc}\n")
                 futures.append(executor.submit(query_virustotal_domain, ioc))
                 futures.append(executor.submit(query_alienvault_domain, ioc))
+                futures.append(executor.submit(query_threatfox, ioc))
             elif ioc_type == "URL":
                 print(f"\nGathering Intel for URL: {ioc}\n")
                 print("Please wait while the URL is being scanned...\n")
                 futures.append(executor.submit(query_virustotal_url, ioc))
                 futures.append(executor.submit(submit_and_query_urlscan, ioc))
+                futures.append(executor.submit(query_threatfox, ioc))
             elif ioc_type in ["MD5", "SHA1", "SHA256"]:
                 print(f"\nGathering Intel for Hash ({ioc_type.upper()}): {ioc}\n")
                 futures.append(executor.submit(query_virustotal_hash, ioc))
                 futures.append(executor.submit(query_alienvault_hash, ioc))
                 futures.append(executor.submit(query_hybrid_analysis_hash, ioc))
+                futures.append(executor.submit(query_threatfox, ioc))
             elif ioc_type == "Email":
                 print(f"\nGathering Intel for Email: {ioc}\n")
+                futures.append(executor.submit(query_hibp_email, ioc))
                 # Add any email-specific queries here if needed
             else:
                 print("Unknown IOC type. Please enter a valid IP, domain, hash, or email.")
