@@ -23,6 +23,9 @@ import concurrent.futures
 import logging
 from tabulate import tabulate
 import pyperclip
+import html  # Add this import for decoding HTML entities
+import re    # Add this import for stripping HTML tags
+import textwrap  # Add this import for wrapping text
 
 # Configure logging to write both INFO and ERROR messages to the same file
 logging.basicConfig(
@@ -348,7 +351,6 @@ def submit_and_query_urlscan(url):
     logging.error("Failed to retrieve URLScan.io report after multiple attempts")
     return {"error": "Failed to retrieve URLScan.io report after multiple attempts"}
 
-
 # Function to query AbuseIPDB for an IP address
 def query_abuseipdb(ip):
     url = "https://api.abuseipdb.com/api/v2/check"
@@ -530,13 +532,32 @@ def format_results_as_table(results):
                 formatted_dict.append(f"{' ' * indent}{k}: {format_value(v, indent + 2)}")
             return '\n'.join(formatted_dict)
         elif isinstance(value, list):
-            # Format each item in the list without splitting into lines
-            filtered_values = [item for item in value if item]
-            if not filtered_values:
-                return "N/A"  # Return "N/A" if the list is empty
-            unique_values = list(dict.fromkeys(map(str, filtered_values)))  # Remove duplicates while preserving order
-            formatted_list = [f"{' ' * indent}- {item}" for item in unique_values]
-            return '\n'.join(formatted_list)  # Join the list items with newlines
+            # Special handling for HIBP breaches
+            if "hibp: breaches" in results and value == results["hibp: breaches"]:
+                formatted_breaches = []
+                for breach in value:
+                    # Decode HTML entities and strip HTML tags from the description
+                    description = breach.get('Description', 'No description')
+                    description = html.unescape(description)  # Decode HTML entities
+                    description = re.sub(r'<[^>]+>', '', description)  # Remove HTML tags
+                    description = textwrap.fill(description, width=80)  # Wrap text to 80 characters
+                    description = textwrap.indent(description, ' ' * (indent + 2))  # Indent wrapped lines
+
+                    formatted_breaches.append(
+                        f"{' ' * indent}Name: {breach.get('Name', 'Unknown')}\n"
+                        f"{' ' * (indent + 2)}Breach Date: {breach.get('BreachDate', 'Unknown')}\n"
+                        f"{' ' * (indent + 2)}Description: {description}\n"
+                        f"{' ' * (indent + 2)}Data Exposed: {', '.join(breach.get('DataClasses', []))}\n"
+                    )
+                return '\n'.join(formatted_breaches)
+            else:
+                # Format other lists
+                filtered_values = [item for item in value if item]
+                if not filtered_values:
+                    return "N/A"  # Return "N/A" if the list is empty
+                unique_values = list(dict.fromkeys(map(str, filtered_values)))  # Remove duplicates while preserving order
+                formatted_list = [f"{' ' * indent}- {item}" for item in unique_values]
+                return '\n'.join(formatted_list)  # Join the list items with newlines
         elif value in [None, ""]:
             return "N/A"  # Return "N/A" for empty or None values
         return str(value)
@@ -575,7 +596,7 @@ def main():
             futures = []
             
             if ioc_type in ["IPv4", "IPv6"]:
-                print(f"\nGathering Intel for IP: {ioc}\n")
+                print(f"\nGathering Intel for IP {ioc}\n")
                 futures.append(executor.submit(query_virustotal_ip, ioc))
                 futures.append(executor.submit(query_abuseipdb, ioc))
                 futures.append(executor.submit(query_shodan, ioc))
@@ -584,12 +605,12 @@ def main():
                 futures.append(executor.submit(query_ipinfo, ioc))
                 futures.append(executor.submit(query_threatfox, ioc))
             elif ioc_type == "Domain":
-                print(f"\nGathering Intel for Domain: {ioc}\n")
+                print(f"\nGathering Intel for Domain {ioc}\n")
                 futures.append(executor.submit(query_virustotal_domain, ioc))
                 futures.append(executor.submit(query_alienvault_domain, ioc))
                 futures.append(executor.submit(query_threatfox, ioc))
             elif ioc_type == "URL":
-                print(f"\nGathering Intel for URL: {ioc}\n")
+                print(f"\nGathering Intel for URL {ioc}\n")
                 print("Please wait while the URL is being scanned...\n")
                 futures.append(executor.submit(query_virustotal_url, ioc))
                 futures.append(executor.submit(submit_and_query_urlscan, ioc))
@@ -601,7 +622,7 @@ def main():
                 futures.append(executor.submit(query_hybrid_analysis_hash, ioc))
                 futures.append(executor.submit(query_threatfox, ioc))
             elif ioc_type == "Email":
-                print(f"\nGathering Intel for Email: {ioc}\n")
+                print(f"\nGathering Intel for Email {ioc}\n")
                 futures.append(executor.submit(query_hibp_email, ioc))
                 # Add any email-specific queries here if needed
             else:
