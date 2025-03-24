@@ -933,3 +933,41 @@
 2025-03-23 23:54:44 - INFO - Successful query for VirusTotal: tags: []
 2025-03-23 23:54:44 - INFO - Successful query for VirusTotal: permalink: https://www.virustotal.com/gui/ip-address/118.122.147.8
 2025-03-23 23:54:44 - INFO - Final results for IOC 118.122.147.8: {'Input': '118.122.147.8', 'Input Type': 'IPv4', 'Shodan: ip': '118.122.147.8', 'Shodan: country': 'China', 'Shodan: organization': 'CHINANET Sichuan province network', 'Shodan: open_ports': [1701, 22], 'Shodan: vulnerabilities': ['CVE-2023-51385', 'CVE-2016-20012', 'CVE-2018-15919', 'CVE-2017-15906', 'CVE-2021-36368', 'CVE-2023-51767', 'CVE-2018-20685', 'CVE-2018-15473', 'CVE-2020-14145', 'CVE-2020-15778', 'CVE-2023-48795', 'CVE-2023-38408', 'CVE-2007-2768', 'CVE-2008-3844', 'CVE-2019-6111', 'CVE-2019-6110', 'CVE-2021-41617', 'CVE-2019-6109'], 'Shodan: hostnames': [], 'Shodan: permalink': 'https://www.shodan.io/host/118.122.147.8', 'AbuseIPDB: abuse_confidence': 100, 'AbuseIPDB: total_reports': 864, 'AbuseIPDB: country': 'CN', 'AbuseIPDB: usage_type': 'Data Center/Web Hosting/Transit', 'AbuseIPDB: isp': 'CHINANET Sichuan province network', 'AbuseIPDB: domain': 'chinatelecom.cn', 'AbuseIPDB: hostnames': [], 'AbuseIPDB: last_report': '2025-03-23T12:52:30+00:00', 'AbuseIPDB: is_public': True, 'AbuseIPDB: isTor': False, 'AbuseIPDB: isProxy': 'Unknown', 'AbuseIPDB: permalink': 'https://www.abuseipdb.com/check/118.122.147.8', 'Alienvault OTX: pulse_count': 6, 'Alienvault OTX: tags': ['Bruteforce', 'Brute-Force', 'SSH', 'Honeypot', 'cowrie', 'ssh', 'malicious', 'sftp', 'cowrie', 'ssh', 'honeypot', 'SSH', 'bruteforce', 'honeypot', 'brute force', 'ssh'], 'Alienvault OTX: name': ['SSH Brute-Force Honeypot Live', 'Honeypot Data - March 2025 - Cowrie', 'Fakelabs Honeynet Project', 'SSH honeypot logs for 2025-03-13', 'Automated Threat Intelligence - Brute-force hosts for 2025-03-05', '2025-02-25 Fail2Ban 7f878580-d43a-47bc-83d8-d3df7afdafdc'], 'Alienvault OTX: permalink': 'https://otx.alienvault.com/indicator/ip/118.122.147.8', 'VirusTotal: country': 'CN', 'VirusTotal: as_owner': 'CHINANET SiChuan Telecom Internet Data Center', 'VirusTotal: reputation': {'malicious': 11, 'suspicious': 4, 'undetected': 26, 'harmless': 53, 'timeout': 0}, 'VirusTotal: malicious_vote': 3, 'VirusTotal: harmless_vote': 0, 'VirusTotal: tags': [], 'VirusTotal: permalink': 'https://www.virustotal.com/gui/ip-address/118.122.147.8'}
+2025-03-24 11:14:06 - INFO - Successful API request: https://www.virustotal.com/api/v3/urls
+2025-03-24 11:14:07 - INFO - Successful API request: https://urlscan.io/api/v1/scan/
+2025-03-24 11:14:07 - INFO - Scan submitted. Scan ID: 0195c57f-e0ef-7000-a520-fd7432551c97. Waiting for the scan to complete...
+2025-03-24 11:14:38 - ERROR - API request failed: 404 Client Error: Not Found for url: https://urlscan.io/api/v1/result/0195c57f-e0ef-7000-a520-fd7432551c97/
+2025-03-24 11:14:38 - ERROR - Error retrieving report: 404 Client Error: Not Found for url: https://urlscan.io/api/v1/result/0195c57f-e0ef-7000-a520-fd7432551c97/
+2025-03-24 11:14:38 - ERROR - Failed query for error: 404 Client Error: Not Found for url: https://urlscan.io/api/v1/result/0195c57f-e0ef-7000-a520-fd7432551c97/
+2025-03-24 11:15:07 - INFO - Successful API request: https://www.virustotal.com/api/v3/analyses/u-9d116b1b0c1200ca75016e4c010bc94836366881b021a658ea7f8548b6543c1e-1742774650
+2025-03-24 11:15:07 - INFO - Successful query for VirusTotal: reputation: {'malicious': 0, 'suspicious': 0, 'undetected': 25, 'harmless': 71, 'timeout': 0}
+2025-03-24 11:15:07 - INFO - Successful query for VirusTotal: malicious_vote: 0
+2025-03-24 11:15:07 - INFO - Successful query for VirusTotal: harmless_vote: 0
+2025-03-24 11:15:07 - INFO - Successful query for VirusTotal: permalink: https://www.virustotal.com/gui/url/aHR0cHM6Ly9nb29nbGUuY29t
+2025-03-24 11:15:07 - INFO - Final results for IOC https://google.com: {'Input': 'https://google.com', 'Input Type': 'URL', 'error': '404 Client Error: Not Found for url: https://urlscan.io/api/v1/result/0195c57f-e0ef-7000-a520-fd7432551c97/', 'VirusTotal: reputation': {'malicious': 0, 'suspicious': 0, 'undetected': 25, 'harmless': 71, 'timeout': 0}, 'VirusTotal: malicious_vote': 0, 'VirusTotal: harmless_vote': 0, 'VirusTotal: permalink': 'https://www.virustotal.com/gui/url/aHR0cHM6Ly9nb29nbGUuY29t'}
+2025-03-24 11:30:35 - INFO - Successful API request: https://www.virustotal.com/api/v3/urls
+2025-03-24 11:30:36 - INFO - Successful API request: https://urlscan.io/api/v1/scan/
+2025-03-24 11:30:36 - INFO - Scan submitted. Scan ID: 0195c58e-f918-7000-ae1b-f61046cb2625. Waiting for the scan to complete...
+2025-03-24 11:31:07 - ERROR - API request failed: 404 Client Error: Not Found for url: https://urlscan.io/api/v1/result/0195c58e-f918-7000-ae1b-f61046cb2625/
+2025-03-24 11:31:07 - ERROR - Error retrieving report: 404 Client Error: Not Found for url: https://urlscan.io/api/v1/result/0195c58e-f918-7000-ae1b-f61046cb2625/
+2025-03-24 11:31:07 - ERROR - Failed query for error: 404 Client Error: Not Found for url: https://urlscan.io/api/v1/result/0195c58e-f918-7000-ae1b-f61046cb2625/
+2025-03-24 11:31:36 - INFO - Successful API request: https://www.virustotal.com/api/v3/analyses/u-4c002ec90b279349ab2906c1486670e0eb65c708cd44bbfab27140828c7e411c-1742776235
+2025-03-24 11:31:36 - INFO - Successful query for VirusTotal: reputation: {'malicious': 7, 'suspicious': 1, 'undetected': 28, 'harmless': 60, 'timeout': 0}
+2025-03-24 11:31:36 - INFO - Successful query for VirusTotal: malicious_vote: 0
+2025-03-24 11:31:36 - INFO - Successful query for VirusTotal: harmless_vote: 0
+2025-03-24 11:31:36 - INFO - Successful query for VirusTotal: permalink: https://www.virustotal.com/gui/url/aHR0cDovLzE1NS4xMzguMjMwLjE2L2JpbnMvYXJtdjRs
+2025-03-24 11:31:36 - INFO - Final results for IOC http://155.138.230.16/bins/armv4l: {'Input': 'http://155.138.230.16/bins/armv4l', 'Input Type': 'URL', 'error': '404 Client Error: Not Found for url: https://urlscan.io/api/v1/result/0195c58e-f918-7000-ae1b-f61046cb2625/', 'VirusTotal: reputation': {'malicious': 7, 'suspicious': 1, 'undetected': 28, 'harmless': 60, 'timeout': 0}, 'VirusTotal: malicious_vote': 0, 'VirusTotal: harmless_vote': 0, 'VirusTotal: permalink': 'https://www.virustotal.com/gui/url/aHR0cDovLzE1NS4xMzguMjMwLjE2L2JpbnMvYXJtdjRs'}
+2025-03-24 11:33:13 - INFO - Successful API request: https://otx.alienvault.com/api/v1/indicators/domain/u1.issuingdingbat.shop
+2025-03-24 11:33:13 - INFO - Successful query for Alienvault OTX: pulse_count: 0
+2025-03-24 11:33:13 - INFO - Successful query for Alienvault OTX: tags: []
+2025-03-24 11:33:13 - INFO - Successful query for Alienvault OTX: name: []
+2025-03-24 11:33:13 - INFO - Successful query for Alienvault OTX: permalink: https://otx.alienvault.com/indicator/domain/u1.issuingdingbat.shop
+2025-03-24 11:33:13 - INFO - Successful API request: https://www.virustotal.com/api/v3/domains/u1.issuingdingbat.shop
+2025-03-24 11:33:13 - INFO - Successful query for VirusTotal: categories: {}
+2025-03-24 11:33:13 - INFO - Successful query for VirusTotal: registrar: Unknown
+2025-03-24 11:33:13 - INFO - Successful query for VirusTotal: reputation: {'malicious': 9, 'suspicious': 1, 'undetected': 32, 'harmless': 52, 'timeout': 0}
+2025-03-24 11:33:13 - INFO - Successful query for VirusTotal: malicious_vote: 0
+2025-03-24 11:33:13 - INFO - Successful query for VirusTotal: harmless_vote: 0
+2025-03-24 11:33:13 - INFO - Successful query for VirusTotal: tags: []
+2025-03-24 11:33:13 - INFO - Successful query for VirusTotal: permalink: https://www.virustotal.com/gui/domain/u1.issuingdingbat.shop
+2025-03-24 11:33:13 - INFO - Final results for IOC u1.issuingdingbat.shop: {'Input': 'u1.issuingdingbat.shop', 'Input Type': 'Domain', 'Alienvault OTX: pulse_count': 0, 'Alienvault OTX: tags': [], 'Alienvault OTX: name': [], 'Alienvault OTX: permalink': 'https://otx.alienvault.com/indicator/domain/u1.issuingdingbat.shop', 'VirusTotal: categories': {}, 'VirusTotal: registrar': 'Unknown', 'VirusTotal: reputation': {'malicious': 9, 'suspicious': 1, 'undetected': 32, 'harmless': 52, 'timeout': 0}, 'VirusTotal: malicious_vote': 0, 'VirusTotal: harmless_vote': 0, 'VirusTotal: tags': [], 'VirusTotal: permalink': 'https://www.virustotal.com/gui/domain/u1.issuingdingbat.shop'}
