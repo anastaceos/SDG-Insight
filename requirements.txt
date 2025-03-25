@@ -1,0 +1,7 @@
+requests
+validators
+python-dotenv
+tabulate
+pyperclip
+whois
+textwrap3
