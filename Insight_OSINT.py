@@ -1,12 +1,3 @@
-'''
-additional packages needed for sdg insight
-
-pip install validators
-pip install python-dotenv
-pip install tabulate
-pip install pyperclip
-'''
-
 import requests # Add this import for HTTP requests
 import time # Add this import for sleep
 import json # Add this import for JSON parsing
@@ -35,24 +26,20 @@ logging.basicConfig(
     datefmt='%Y-%m-%d %H:%M:%S'  # Date format
 )
 
-#load_dotenv()  # Load API keys from a .env file
+# Load environment variables from the .env file
+load_dotenv()
 
-#VIRUSTOTAL_API_KEY = os.getenv("VIRUSTOTAL_API_KEY")
-#ABUSEIPDB_API_KEY = os.getenv("ABUSEIPDB_API_KEY")http
-#HYBRID_ANALYSIS_API_KEY = os.getenv("HYBRID_ANALYSIS_API_KEY")
-
-# API Keys (Set your own keys here)
-VIRUSTOTAL_API_KEY = "ca1e9b61569e86434c6e5e30345c6a453e51b3f0197148c3d51af895968bd4ba"
-ABUSEIPDB_API_KEY = "fb7a1175a449e459010776fea3d4ec2832b647da0422384efbbadc4ad594479f7efb6983dfe522ea"
-HYBRID_ANALYSIS_API_KEY = "6rnakmkj6ed49416v459v1fl75bbd7e3abafiwmf99ea95f84ow80g0ce3464a5d"
-URLSCAN_API_KEY = "01958a4b-1aec-7001-9c07-e01053a8158b"
-SHODAN_API_KEY = "Pc0gdLR5F1JXVSPLRDazU6u50YMjbUNW"
-ALIENVAULT_API_KEY = "b1a72dbeaa5f0991bc9d57f4ed64234341cb015a15c205a02a0d440bf2079418"
-GREYNOISE_API_KEY= "0QzTcyXH5V2DycaLC5LVfYH4At1EXGDVIgLF6mOFZWXJMamiymDVs7NcAzCzguV7"
-IPINFO_API_KEY= "25e8915b17234a"
-THREATFOX_API_KEY= "bd86ca0e69e3deb541b7283bdc2eede881fad48a4a7a205b"
-HIBP_API_KEY= "9cceaed6583144ca94486ac0e677797f"
-
+# Retrieve API keys from environment variables
+VIRUSTOTAL_API_KEY = os.getenv("VIRUSTOTAL_API_KEY")
+ABUSEIPDB_API_KEY = os.getenv("ABUSEIPDB_API_KEY")
+HYBRID_ANALYSIS_API_KEY = os.getenv("HYBRID_ANALYSIS_API_KEY")
+URLSCAN_API_KEY = os.getenv("URLSCAN_API_KEY")
+SHODAN_API_KEY = os.getenv("SHODAN_API_KEY")
+ALIENVAULT_API_KEY = os.getenv("ALIENVAULT_API_KEY")
+GREYNOISE_API_KEY = os.getenv("GREYNOISE_API_KEY")
+IPINFO_API_KEY = os.getenv("IPINFO_API_KEY")
+THREATFOX_API_KEY = os.getenv("THREATFOX_API_KEY")
+HIBP_API_KEY = os.getenv("HIBP_API_KEY")
 
 # Headers for APIs
 VT_HEADERS = {
@@ -70,7 +57,7 @@ HYBRID_ANALYSIS_HEADERS = {
     "Content-Type": "application/x-www-form-urlencoded"
 }
 URLSCAN_HEADERS = {
-    "API-Key": URLSCAN_API_KEY.strip(),  # Ensure no extra spaces, 
+    "API-Key": URLSCAN_API_KEY, 
     "Content-Type": "application/json"
 }
 ALIENVAULT_HEADERS = {
@@ -508,7 +495,7 @@ def query_threatfox(ioc): # Add this function to query ThreatFox for threat inte
         
         # Check if the query was successful and if data was returned
         if data.get("query_status") != "ok" or not data.get("data"):
-            return {"threatfox: result": "No IOC match found"}
+            return {"Threatfox: result": "No IOC match found"}
 
         # Extract the top result from the data
         top = data["data"][0]
