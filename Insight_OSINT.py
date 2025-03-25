@@ -7,22 +7,22 @@ pip install tabulate
 pip install pyperclip
 '''
 
-import requests
-import time
-import json
-import socket
-import whois
-import re
-from urllib.parse import urlparse
-import validators
-import base64
-import urllib.parse
-import os
-from dotenv import load_dotenv
-import concurrent.futures
-import logging
-from tabulate import tabulate
-import pyperclip
+import requests # Add this import for HTTP requests
+import time # Add this import for sleep
+import json # Add this import for JSON parsing
+import socket # Add this import for WHOIS lookups
+import whois # Add this import for WHOIS lookups
+import re # Add this import for regular expressions
+from urllib.parse import urlparse # Add this import for URL parsing
+import validators # Add this import for IOC validation
+import base64 # Add this import for URL encoding
+import urllib.parse # Add this import for URL encoding
+import os # Add this import for loading API keys from a .env file
+from dotenv import load_dotenv # Add this import for loading API keys from a .env file
+import concurrent.futures # Add this import for threading
+import logging # Add this import for logging
+from tabulate import tabulate # Add this import for formatting results as a table
+import pyperclip   # Add this import for copying results to clipboard
 import html  # Add this import for decoding HTML entities
 import re    # Add this import for stripping HTML tags
 import textwrap  # Add this import for wrapping text
@@ -92,6 +92,7 @@ HIBP_HEADERS = {
     "User-Agent": "SOC-Investigator-Script/1.0"
 }
 
+# Function to display the tool banner
 def display_banner():
     banner = r"""
   _____           _       _     _           ____   _____ _____ _   _ _______ 
@@ -111,7 +112,8 @@ def display_banner():
          ------------------------------------------------------------
      """
     print(banner)
-    
+
+# Function to determine the type of IOC    
 def determine_ioc_type(ioc):
     if validators.ipv4(ioc):
         return "IPv4"
@@ -486,27 +488,29 @@ def query_hibp_email(email):
 
 
 # Function to query ThreatFox for threat intelligence
-def query_threatfox(ioc):
-    url = "https://threatfox-api.abuse.ch/api/v1/"
-    headers = {
+def query_threatfox(ioc): # Add this function to query ThreatFox for threat intelligence
+    url = "https://threatfox-api.abuse.ch/api/v1/" # ThreatFox API URL
+    headers = { # Headers for the ThreatFox API
         "Content-Type": "application/json",
         "Auth-Key": THREATFOX_API_KEY
     }
 
-    payload = {
+    payload = { # Payload for the ThreatFox API
         "query": "search_ioc",
         "search_term": ioc,
         "exact_match": True
     }
 
-    try:
+    try: # Try to send a POST request to the ThreatFox API
         response = requests.post(url, headers=headers, json=payload)
         response.raise_for_status()
         data = response.json()
-
+        
+        # Check if the query was successful and if data was returned
         if data.get("query_status") != "ok" or not data.get("data"):
             return {"threatfox: result": "No IOC match found"}
 
+        # Extract the top result from the data
         top = data["data"][0]
         return {
             "Threatfox: ioc_type": top.get("ioc_type_desc", "Unknown"),
@@ -519,34 +523,37 @@ def query_threatfox(ioc):
             "Threatfox: tags": top.get("tags", []),
             "Threatfox: malpedia": top.get("malware_malpedia", None)
         }
-
+    
+    # Handle any exceptions that occur during the request
     except requests.RequestException as e:
         return {"threatfox: error": str(e)}
 
 # Function to format results as a table using the tabulate library
-def format_results_as_table(results):
-    def format_value(value, indent=0):
-        if isinstance(value, dict):
-            formatted_dict = []
-            for k, v in value.items():
+def format_results_as_table(results): # Add this function to format results as a table
+    def format_value(value, indent=0): # Add a nested function to format values
+        if isinstance(value, dict): # Check if the value is a dictionary
+            # Format dictionaries with indentation
+            formatted_dict = [] # List to store formatted dictionary items
+            for k, v in value.items(): # Iterate over the dictionary items
+                # Recursively format nested dictionaries
                 formatted_dict.append(f"{' ' * indent}{k}: {format_value(v, indent + 2)}")
-            return '\n'.join(formatted_dict)
-        elif isinstance(value, list):
+            return '\n'.join(formatted_dict) # Join the formatted items with newlines
+        elif isinstance(value, list): # Check if the value is a list
             # Special handling for HIBP breaches
             if "hibp: breaches" in results and value == results["hibp: breaches"]:
-                formatted_breaches = []
-                for breach in value:
+                formatted_breaches = [] # List to store formatted breach details
+                for breach in value: # Iterate over the breach details
                     # Decode HTML entities and strip HTML tags from the description
-                    description = breach.get('Description', 'No description')
+                    description = breach.get('Description', 'No description') # Get the description
                     description = html.unescape(description)  # Decode HTML entities
                     description = re.sub(r'<[^>]+>', '', description)  # Remove HTML tags
                     description = textwrap.fill(description, width=80)  # Wrap text to 80 characters
                     description = textwrap.indent(description, ' ' * (indent + 2))  # Indent wrapped lines
-
-                    formatted_breaches.append(
-                        f"{' ' * indent}Name: {breach.get('Name', 'Unknown')}\n"
-                        f"{' ' * (indent + 2)}Breach Date: {breach.get('BreachDate', 'Unknown')}\n"
-                        f"{' ' * (indent + 2)}Description: {description}\n"
+                    # Format the breach details
+                    formatted_breaches.append( # Append the formatted breach details
+                        f"{' ' * indent}Name: {breach.get('Name', 'Unknown')}\n" 
+                        f"{' ' * (indent + 2)}Breach Date: {breach.get('BreachDate', 'Unknown')}\n" 
+                        f"{' ' * (indent + 2)}Description: {description}\n" 
                         f"{' ' * (indent + 2)}Data Exposed: {', '.join(breach.get('DataClasses', []))}\n"
                     )
                 return '\n'.join(formatted_breaches)
@@ -561,7 +568,8 @@ def format_results_as_table(results):
         elif value in [None, ""]:
             return "N/A"  # Return "N/A" for empty or None values
         return str(value)
-
+    
+    # Create a table from the results dictionary
     table = []
     for key, value in results.items():
         # Skip entries where the value contains "error"
@@ -592,8 +600,9 @@ def main():
         ioc_type = determine_ioc_type(ioc)
         result = {"Input": ioc, "Input Type": ioc_type}
         
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            futures = []
+        # Perform queries based on the IOC type
+        with concurrent.futures.ThreadPoolExecutor() as executor: # Use threads for concurrent API queries
+            futures = [] # List to store futures for each API query
             
             if ioc_type in ["IPv4", "IPv6"]:
                 print(f"\nGathering Intel for IP {ioc}\n")
@@ -628,7 +637,7 @@ def main():
             else:
                 print("Unknown IOC type. Please enter a valid IP, domain, hash, or email.")
                 continue
-            
+            # Wait for all futures to complete
             for future in concurrent.futures.as_completed(futures):
                 query_result = future.result()
                 result.update(query_result)
@@ -640,6 +649,7 @@ def main():
                     else:
                         logging.info(f"Successful query for {key}: {value}")
             
+            # Format and display the results as a table
             formatted_results = format_results_as_table(result)
             print(formatted_results)
             
@@ -647,8 +657,10 @@ def main():
             pyperclip.copy(formatted_results)
             print("\nResults have been copied to the clipboard.")
             
+            # Log final results
             logging.info(f"Final results for IOC {ioc}: {result}")
 
+# Run the main function when the script is executed
 if __name__ == "__main__":
-    display_banner()
-    main()
+    display_banner() # Display the tool banner
+    main() # Run the main function
