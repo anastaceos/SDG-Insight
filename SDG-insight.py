@@ -83,12 +83,11 @@ HIBP_HEADERS = {
 def display_banner():
     banner = r"""
 
-          ____  ____   ____      ___ _   _ ____ ___ ____ _   _ _____ 
-         / ___||  _ \ / ___|    |_ _| \ | / ___|_ _/ ___| | | |_   _|
-         \___ \| | | | |  _ _____| ||  \| \___ \| | |  _| |_| | | |  
-          ___) | |_| | |_| |_____| || |\  |___) | | |_| |  _  | | |  
-         |____/|____/ \____|    |___|_| \_|____/___\____|_| |_| |_|  
-                                                             
+            ____  ____   ____      ___ _   _ ____ ___ ____ _   _ _____ 
+           / ___||  _ \ / ___|    |_ _| \ | / ___|_ _/ ___| | | |_   _|
+           \___ \| | | | |  _ _____| ||  \| \___ \| | |  _| |_| | | |  
+            ___) | |_| | |_| |_____| || |\  |___) | | |_| |  _  | | |  
+           |____/|____/ \____|    |___|_| \_|____/___\____|_| |_| |_|                                                               
       
                   SOC Analyst All-in-One Investigation Tool
           ------------------------------------------------------------
@@ -124,7 +123,7 @@ def determine_ioc_type(ioc):
 def query_api(url, headers, params=None, data=None, method="GET"):
     try:
         if method == "GET":
-            response = requests.get(url, headers=headers, params=params)
+            response = requests.get(url, headers=headers, params=params, timeout=10)
         elif method == "POST":
             response = requests.post(url, headers=headers, data=data)
         response.raise_for_status()
@@ -614,6 +613,10 @@ def main():
         # Determine the type of IOC
         ioc = ioc.strip() # Strip leading/trailing whitespace
         #ioc = ioc.lower() # Convert to lowercase
+        if not ioc.strip():
+            print("No input provided. Please enter a valid IOC.")
+            logging.warning("Empty input received.")
+            continue
         ioc_type = determine_ioc_type(ioc)
         result = {"Input": ioc, "Input Type": ioc_type}
         
@@ -656,6 +659,7 @@ def main():
                 # Add any email-specific queries here if needed
             else:
                 print("Unknown IOC type. Please enter a valid IP, domain, hash, or email.")
+                logging.warning(f"Invalid IOC entered: {ioc}")
                 continue
             # Wait for all futures to complete
             for future in concurrent.futures.as_completed(futures):
