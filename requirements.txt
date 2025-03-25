@@ -1,6 +1,7 @@
 requests
 validators
 python-dotenv
+python-whois
 tabulate
 pyperclip
 whois

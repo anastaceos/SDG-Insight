@@ -134,6 +134,36 @@ def query_api(url, headers, params=None, data=None, method="GET"):
         logging.error(f"API request failed: {e}")
         return {"error": str(e)}
     
+    # Function to perform a WHOIS lookup
+def query_whois(ioc, ioc_type):
+    try:
+        if ioc_type in ["Domain", "URL"]:
+            # Extract domain from URL if necessary
+            domain = ioc if ioc_type == "Domain" else urlparse(ioc).netloc
+            whois_data = whois.whois(domain)
+            return {
+                "WHOIS: domain_name": whois_data.get("domain_name", "Unknown"),
+                "WHOIS: registrar": whois_data.get("registrar", "Unknown"),
+                "WHOIS: creation_date": whois_data.get("creation_date", "Unknown"),
+                "WHOIS: expiration_date": whois_data.get("expiration_date", "Unknown"),
+                "WHOIS: updated_date": whois_data.get("updated_date", "Unknown"),
+                "WHOIS: name_servers": whois_data.get("name_servers", []),
+                "WHOIS: status": whois_data.get("status", "Unknown"),
+            }
+        elif ioc_type in ["IPv4", "IPv6"]:
+            # Perform IP WHOIS lookup using socket
+            whois_data = socket.gethostbyaddr(ioc)
+            return {
+                "WHOIS: ip_address": ioc,
+                "WHOIS: hostname": whois_data[0],
+                "WHOIS: aliases": whois_data[1],
+                "WHOIS: ip_addresses": whois_data[2],
+            }
+        else:
+            return {"WHOIS: error": "WHOIS lookup is not supported for this IOC type"}
+    except Exception as e:
+        return {"WHOIS: error": str(e)}
+    
 # Function to query AlienVault OTX for an IP address  
 def query_alienvault_ip(ioc, ioc_type):
     url = f"https://otx.alienvault.com/api/v1/indicators/{ioc_type}/{ioc}/general"
@@ -600,17 +630,20 @@ def main():
                 futures.append(executor.submit(query_greynoise, ioc))
                 futures.append(executor.submit(query_ipinfo, ioc))
                 futures.append(executor.submit(query_threatfox, ioc))
+                futures.append(executor.submit(query_whois, ioc, ioc_type))
             elif ioc_type == "Domain":
                 print(f"\nGathering Intel for domain {ioc}\n")
                 futures.append(executor.submit(query_virustotal_domain, ioc))
                 futures.append(executor.submit(query_alienvault_domain, ioc))
                 futures.append(executor.submit(query_threatfox, ioc))
+                futures.append(executor.submit(query_whois, ioc, ioc_type))
             elif ioc_type == "URL":
                 print(f"\nGathering Intel for URL {ioc}\n")
                 print("Please wait while the URL is being scanned...\n")
                 futures.append(executor.submit(query_virustotal_url, ioc))
                 futures.append(executor.submit(submit_and_query_urlscan, ioc))
                 futures.append(executor.submit(query_threatfox, ioc))
+                futures.append(executor.submit(query_whois, ioc, ioc_type))
             elif ioc_type in ["MD5", "SHA1", "SHA256"]:
                 print(f"\nGathering Intel for hash ({ioc_type.upper()}): {ioc}\n")
                 futures.append(executor.submit(query_virustotal_hash, ioc))
