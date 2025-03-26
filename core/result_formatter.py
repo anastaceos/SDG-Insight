@@ -82,9 +82,18 @@ def format_results_as_table(results): # Add this function to format results as a
     # Create a table from the results dictionary
     table = []
     for key, value in results.items():
-        # Skip entries where the value contains "error"
+        # Skip entries where the value contains "error" (case-insensitive)
         if isinstance(value, str) and "error" in value.lower():
             continue
+        if isinstance(value, dict):
+            # Recursively check for "error" in nested dictionaries
+            if any("error" in str(v).lower() for v in value.values()):
+                continue
+        if isinstance(value, list):
+            # Skip lists that contain "error" as an element
+            if any("error" in str(item).lower() for item in value):
+                continue
+
         # Split the key into tool and field
         if ": " in key:
             tool, field = key.split(": ", 1)
