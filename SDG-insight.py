@@ -11,7 +11,7 @@ from core.api_handlers import ( # Import the API query functions
     query_greynoise, query_ipinfo, query_threatfox,
     query_virustotal_domain, query_alienvault_domain, query_virustotal_url,
     submit_and_query_urlscan, query_virustotal_hash, query_alienvault_hash,
-    query_hybrid_analysis_hash, query_hibp_email
+    query_hybrid_analysis_hash, query_hibp_email, query_whois
 )
 
 # Main function that processes IOCs
@@ -45,17 +45,20 @@ def main():
                 futures.append(executor.submit(query_greynoise, ioc))
                 futures.append(executor.submit(query_ipinfo, ioc))
                 futures.append(executor.submit(query_threatfox, ioc))
+                futures.append(executor.submit(query_whois, ioc, ioc_type))
             elif ioc_type == "Domain": # Check if the IOC is a domain
                 print(f"\nGathering Intel for domain {ioc}\n")
                 futures.append(executor.submit(query_virustotal_domain, ioc))
                 futures.append(executor.submit(query_alienvault_domain, ioc))
                 futures.append(executor.submit(query_threatfox, ioc))
+                futures.append(executor.submit(query_whois, ioc, ioc_type))
             elif ioc_type == "URL": # Check if the IOC is a URL
                 print(f"\nGathering Intel for URL {ioc}\n")
                 print("Please wait while the URL is being scanned...\n")
                 futures.append(executor.submit(query_virustotal_url, ioc))
                 futures.append(executor.submit(submit_and_query_urlscan, ioc))
                 futures.append(executor.submit(query_threatfox, ioc))
+                futures.append(executor.submit(query_whois, ioc, ioc_type))
             elif ioc_type in ["MD5", "SHA1", "SHA256"]: # Check if the IOC is a hash
                 print(f"\nGathering Intel for hash ({ioc_type.upper()}): {ioc}\n")
                 futures.append(executor.submit(query_virustotal_hash, ioc))

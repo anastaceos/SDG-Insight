@@ -404,7 +404,36 @@ def query_hibp_email(email):
 
     except requests.RequestException as e:
         return {"HIBP: error": str(e)}
-
+    
+# Function to perform a WHOIS lookup
+def query_whois(ioc, ioc_type):
+    try:
+        if ioc_type in ["Domain", "URL"]:
+            # Extract domain from URL if necessary
+            domain = ioc if ioc_type == "Domain" else urlparse(ioc).netloc
+            whois_data = whois.whois(domain)
+            return {
+                "WHOIS: domain_name": whois_data.get("domain_name", "Unknown"),
+                "WHOIS: registrar": whois_data.get("registrar", "Unknown"),
+                "WHOIS: creation_date": whois_data.get("creation_date", "Unknown"),
+                "WHOIS: expiration_date": whois_data.get("expiration_date", "Unknown"),
+                "WHOIS: updated_date": whois_data.get("updated_date", "Unknown"),
+                "WHOIS: name_servers": whois_data.get("name_servers", []),
+                "WHOIS: status": whois_data.get("status", "Unknown"),
+            }
+        elif ioc_type in ["IPv4", "IPv6"]:
+            # Perform IP WHOIS lookup using socket
+            whois_data = socket.gethostbyaddr(ioc)
+            return {
+                "WHOIS: ip_address": ioc,
+                "WHOIS: hostname": whois_data[0],
+                "WHOIS: aliases": whois_data[1],
+                "WHOIS: ip_addresses": whois_data[2],
+            }
+        else:
+            return {"WHOIS: error": "WHOIS lookup is not supported for this IOC type"}
+    except Exception as e:
+        return {"WHOIS: error": str(e)}
 
 # Function to query ThreatFox for threat intelligence
 def query_threatfox(ioc): # Add this function to query ThreatFox for threat intelligence
