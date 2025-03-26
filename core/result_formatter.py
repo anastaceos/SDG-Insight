@@ -3,9 +3,9 @@ import html # Add this import for decoding HTML entities
 import re # Add this import for stripping HTML tags
 import textwrap # Add this import for wrapping text to 80 characters
 
-def format_results_as_table(results):
-    def format_value(value, indent=0):
-        if isinstance(value, dict):
+def format_results_as_table(results): # Add this function to format results as a table
+    def format_value(value, indent=0): # Add this function to format the value
+        if isinstance(value, dict): # Check if the value is a dictionary
             # Special handling for URLscan.io results
             if "ip stats" in value or "domain" in value:
                 formatted_urlscan = []
