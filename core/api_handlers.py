@@ -12,7 +12,7 @@ import socket # Add this import for WHOIS lookups
 import whois # Add this import for WHOIS lookups
 import re # Add this import for regular expressions
 from dotenv import load_dotenv # Add this import for loading API keys from a .env file
-
+import re # Add this import for regular expressions
 
 # Load environment variables from the .env file
 load_dotenv()
