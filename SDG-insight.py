@@ -18,7 +18,7 @@ from core.api_handlers import ( # Import the API query functions
 def main():
 
     setup_logging()  # Initialize logging
-    display_banner()  # Display the tool banner
+    display_banner()  # Display the tool banners
 
     while True:
         ioc = input("\nEnter an IOC (IP, domain, hash, email) or type 'exit' to quit: ")
