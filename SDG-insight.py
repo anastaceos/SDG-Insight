@@ -1,6 +1,5 @@
 import concurrent.futures # Add this import for threading
 import logging # Add this import for logging
-from tabulate import tabulate # Add this import for formatting results as a table
 import pyperclip   # Add this import for copying results to clipboard
 from core.banner import display_banner # Import the display_banner function
 from core.ioc_detection import determine_ioc_type # Import the determine_ioc_type function
