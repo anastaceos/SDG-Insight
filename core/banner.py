@@ -17,7 +17,7 @@ def display_banner(print_banner=True):
                   {Fore.YELLOW}SOC Analyst All-in-One Investigation Tool{Style.RESET_ALL}
           ------------------------------------------------------------
           - OSINT | Threat Intelligence | Incident Response
-          - Integrated APIs: VirusTotal, URLScan, AbuseIP DB and more!
+          - Integrated APIs: VirusTotal, URLScan, AbuseIPDB and more!
           - Developed for fast and efficient IOC analysis
           - Version: 1.0.0
           - Documentation: https://github.com/your-repo/SDG-Insight-OSINT
